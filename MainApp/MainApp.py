@@ -1,6 +1,6 @@
 import sys
 from datetime import datetime, time
-# import pandas as pd
+import pandas as pd
 from PyQt5.QtGui import QFont # QIcon, QPixmap,
 from PyQt5.QtWidgets import *
 
@@ -83,11 +83,13 @@ class LossProfitTab(QWidget):
         self.label_operation.setText("Оберіть тип операції")
         self.button_group = QButtonGroup()
         self.check_op_prof = QRadioButton('Profit')
-        #self.check_op_prof.clicked.connect(self.push_to_database)
+        self.check_op_prof_p = QRadioButton('Profit of PODK')
         self.check_op_loss = QRadioButton('Loss')
-        #self.check_op_loss.clicked.connect(self.push_to_database)
+        self.check_op_loss_p = QRadioButton('Loss of PODK')
         self.button_group.addButton(self.check_op_prof, 1)
-        self.button_group.addButton(self.check_op_loss, 2)
+        self.button_group.addButton(self.check_op_prof_p, 2)
+        self.button_group.addButton(self.check_op_loss, 3)
+        self.button_group.addButton(self.check_op_loss_p, 4)
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
@@ -114,16 +116,18 @@ class LossProfitTab(QWidget):
         in_opper_type_layout = QHBoxLayout(self)
         in_opper_type_layout.addWidget(self.label_operation)
         in_opper_type_layout.addWidget(self.check_op_prof)
+        in_opper_type_layout.addWidget(self.check_op_prof_p)
         in_opper_type_layout.addWidget(self.check_op_loss)
+        in_opper_type_layout.addWidget(self.check_op_loss_p)
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.save_to_db)
         button_layout.addWidget(self.form_excel)
 
         mainLayout.addLayout(in_date_layout)
+        mainLayout.addLayout(in_opper_type_layout)
         mainLayout.addLayout(in_pidr_layout)
         mainLayout.addLayout(in_name_layout)
-        mainLayout.addLayout(in_opper_type_layout)
         mainLayout.addWidget(self.tableWidget)
         mainLayout.addLayout(button_layout)
 
@@ -150,7 +154,7 @@ class LossProfitTab(QWidget):
         checket_btn_txt = checket_btn.text()
         if checket_btn_txt == "Loss":
             signal = 2
-        print(signal)
+        # print(signal)
         date = self.input_date.text()
 
         item = self.input_pidr.text()
@@ -160,7 +164,7 @@ class LossProfitTab(QWidget):
         column = 2
         data = []
         row_count = len(self.name_lables[0]) - 2
-        #print(row_count)
+
         for row in range(row_count):
             if self.tableWidget.item(row, column) is not None:
                 item = self.tableWidget.item(row, column).text()
@@ -170,7 +174,7 @@ class LossProfitTab(QWidget):
             data.append(item)
             val_ch = tuple(data)
         add_n_to_db(signal, number_ch, date_op, val_ch)
-        print(signal, number_ch, date_op, val_ch)
+
 
     def export_to_excel(self):
         time_date = time.ctime()
