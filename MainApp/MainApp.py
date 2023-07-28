@@ -44,19 +44,19 @@ class Storage(QWidget):
         function for create and show data from 'main_file' table
         '''
         # table settings
-        row_count = len(self.name_lables[0]) - 2
+        row_count = len(self.name_lables[0]) - 3
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
         self.names = self.name_lables[0] #
         self.values = self.rows[0]
 
-        names_numb = 2
+        names_numb = 3
         for row in range(row_count): # for column 1
             self.tableWidget.setItem(row, 0, QTableWidgetItem(str(self.names[names_numb])))
             names_numb = names_numb+1
         for row in range(row_count): # for column 2
             self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
-        values_numb = 2
+        values_numb = 3
         for row in range(row_count):  # for column 3
             self.tableWidget.setItem(row, 2, QTableWidgetItem(str(self.values[values_numb])))
             values_numb = values_numb + 1
@@ -157,12 +157,12 @@ class LossProfitTab(QWidget):
         function for create and show data from 'main_file' table
         """
         # table settings
-        row_count = len(self.name_lables[0]) - 2
+        row_count = len(self.name_lables[0]) - 3
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
         self.names = self.name_lables[0]  #
         # self.values = self.rows[0]
-        names_numb = 2
+        names_numb = 3
         for row in range(row_count):  # for column 1
             self.tableWidget.setItem(row, 0, QTableWidgetItem(str(self.names[names_numb])))
             names_numb = names_numb + 1
@@ -175,9 +175,10 @@ class LossProfitTab(QWidget):
     def push_to_database(self):
         signal = 1
         checket_btn = self.button_group.checkedButton()
-        checket_btn_txt = checket_btn.text()
-        if checket_btn_txt == "Loss":
-            self.input_detach_list.setDisabled(False)
+        checket_btn_txt = self.button_group.checkedId()
+        print(checket_btn_txt)
+        if checket_btn_txt == 2:
+            #self.input_detach_list.setDisabled(False)
             signal = 2
         # print(signal)
         date = self.input_date.text()
@@ -188,7 +189,7 @@ class LossProfitTab(QWidget):
         number_ch = (item,)
         column = 2
         data = []
-        row_count = len(self.name_lables[0]) - 2
+        row_count = len(self.name_lables[0]) - 3
 
         for row in range(row_count):
             if self.tableWidget.item(row, column) is not None:
@@ -965,6 +966,97 @@ class ProfitLossZvit(QWidget):
                 df.to_excel(file)
 
 
+class CreateDetachment(QWidget):
+    def __init__(self, parent=None):
+        super(CreateDetachment, self).__init__()
+        self.parent = parent
+
+        self.label_main = QLabel(self)
+        self.label_main.setText('Введіть дані підрозділів:')
+        self.label_main.setFont(QFont("Times New Roman", 16, 50))
+        self.label_main2 = QLabel(self)
+
+        self.label_detach_name1 = QLabel(self)
+        self.label_detach_name1.setText('Введіть назву підрозділу:')
+        self.input_detach_name1 = QLineEdit(self)
+        self.label_detach_index1 = QLabel(self)
+        self.label_detach_index1.setText('Введіть індекс підрозділу:')
+        self.input_detach_index1 = QLineEdit(self)
+
+        self.label_detach_name2 = QLabel(self)
+        self.label_detach_name2.setText('Введіть назву підрозділу:')
+        self.input_detach_name2 = QLineEdit(self)
+        self.label_detach_index2 = QLabel(self)
+        self.label_detach_index2.setText('Введіть індекс підрозділу:')
+        self.input_detach_index2 = QLineEdit(self)
+
+        self.label_detach_name3 = QLabel(self)
+        self.label_detach_name3.setText('Введіть назву підрозділу:')
+        self.input_detach_name3 = QLineEdit(self)
+        self.label_detach_index3 = QLabel(self)
+        self.label_detach_index3.setText('Введіть індекс підрозділу:')
+        self.input_detach_index3 = QLineEdit(self)
+
+        self.label_detach_name4 = QLabel(self)
+        self.label_detach_name4.setText('Введіть назву підрозділу:')
+        self.input_detach_name4 = QLineEdit(self)
+        self.label_detach_index4 = QLabel(self)
+        self.label_detach_index4.setText('Введіть індекс підрозділу:')
+        self.input_detach_index4 = QLineEdit(self)
+
+        self.label_detach_name5 = QLabel(self)
+        self.label_detach_name5.setText('Введіть назву підрозділу:')
+        self.input_detach_name5 = QLineEdit(self)
+        self.label_detach_index5 = QLabel(self)
+        self.label_detach_index5.setText('Введіть індекс підрозділу:')
+        self.input_detach_index5 = QLineEdit(self)
+
+        self.save_btn = QPushButton('Зберегти у базу даних')
+
+
+        main_box_layout = QVBoxLayout(self)
+
+        in_data_1_layout = QHBoxLayout(self)
+        in_data_1_layout.addWidget(self.label_detach_name1)
+        in_data_1_layout.addWidget(self.input_detach_name1)
+        in_data_1_layout.addWidget(self.label_detach_index1)
+        in_data_1_layout.addWidget(self.input_detach_index1)
+
+        in_data_2_layout = QHBoxLayout(self)
+        in_data_2_layout.addWidget(self.label_detach_name2)
+        in_data_2_layout.addWidget(self.input_detach_name2)
+        in_data_2_layout.addWidget(self.label_detach_index2)
+        in_data_2_layout.addWidget(self.input_detach_index2)
+
+        in_data_3_layout = QHBoxLayout(self)
+        in_data_3_layout.addWidget(self.label_detach_name3)
+        in_data_3_layout.addWidget(self.input_detach_name3)
+        in_data_3_layout.addWidget(self.label_detach_index3)
+        in_data_3_layout.addWidget(self.input_detach_index3)
+
+        in_data_4_layout = QHBoxLayout(self)
+        in_data_4_layout.addWidget(self.label_detach_name4)
+        in_data_4_layout.addWidget(self.input_detach_name4)
+        in_data_4_layout.addWidget(self.label_detach_index4)
+        in_data_4_layout.addWidget(self.input_detach_index4)
+
+        in_data_5_layout = QHBoxLayout(self)
+        in_data_5_layout.addWidget(self.label_detach_name5)
+        in_data_5_layout.addWidget(self.input_detach_name5)
+        in_data_5_layout.addWidget(self.label_detach_index5)
+        in_data_5_layout.addWidget(self.input_detach_index5)
+
+        main_box_layout.addWidget(self.label_main)
+        main_box_layout.addWidget(self.label_main2)
+        main_box_layout.addLayout(in_data_1_layout)
+        main_box_layout.addLayout(in_data_2_layout)
+        main_box_layout.addLayout(in_data_3_layout)
+        main_box_layout.addLayout(in_data_4_layout)
+        main_box_layout.addLayout(in_data_5_layout)
+        main_box_layout.addStretch()
+        main_box_layout.addWidget(self.save_btn)
+
+
 class MainWindow(QMainWindow):#, QDialog):
     """
     MAIN window Class
@@ -987,6 +1079,7 @@ class MainWindow(QMainWindow):#, QDialog):
         self.main_widget.addTab(Bread(), "Bread")
         self.main_widget.addTab(BreadZvit(), "BreadZvit")
         self.main_widget.addTab(ProfitLossZvit(), "ProfitLossZvit")
+        self.main_widget.addTab(CreateDetachment(), "CreateDetachments")
 
 
 ### Final App Block ###
