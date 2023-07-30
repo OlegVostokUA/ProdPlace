@@ -5,6 +5,7 @@ from PyQt5.QtGui import QFont# QIcon, QPixmap,
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore
 
+import Database.sql_handlers
 from Database.sql_handlers import *
 
 
@@ -17,6 +18,7 @@ columns_for_rozclad = ('День тижня', 'Прийом їжі', 'Страв
 columns_bread = ['Дата', 'Витрачено \nборошна', 'Отримано \nхліба', 'Вихід \nплановий \n(%)', 'Вихід \nфактичний \n(%)', 'Олія\nза нормою\nв кг', 'Олія\nза нормою\nв %', 'Олія\nфактично\nв кг', 'Олія\nфактично\nв %', 'Сіль\nза нормою\nв кг', 'Сіль\nза нормою\nв %', 'Сіль\nфактично\nв кг', 'Сіль\nфактично\nв %', 'Дріжджі\nза нормою\nв кг', 'Дріжджі\nза нормою\nв %', 'Дріжджі\nфактично\nв кг', 'Дріжджі\nфактично\nв %']
 columns_bread_act = ['Найменування \nматеріальних \nзасобів', 'Одиниця \nвиімру', 'Витрачено \nсировини', 'ціна \nза од.', 'Отримано \nпродукції', 'ціна \nза од.']
 rows_bread_act = ['Борошно пшеничне \nІ гат', 'Дріжджі сухі', 'Олія', 'Сіль', 'Хліб пшеничний \nз борошна І гат.', 'ВСЬОГО:']
+val_default = Database.sql_handlers.val_zag
 
 
 class Storage(QWidget):
@@ -83,7 +85,8 @@ class LossProfitTab(QWidget):
         self.label_detach_list = QLabel(self)
         self.label_detach_list.setText('Оберіть підрозділ:') #
         self.input_detach_list = QComboBox(self)
-        self.input_detach_list.addItems(['---', 'first', 'second'])
+        names_dict = parse_db_names_detach() ###
+        self.input_detach_list.addItems(list(names_dict.keys()))
         # self.input_detach_list = QLineEdit(unk)
         self.label_name = QLabel(self)
         self.label_name.setText('Введіть прізвище, ім’я того, через кого здійснюєтся операція:')
@@ -1012,6 +1015,7 @@ class CreateDetachment(QWidget):
         self.input_detach_index5 = QLineEdit(self)
 
         self.save_btn = QPushButton('Зберегти у базу даних')
+        self.save_btn.clicked.connect(self.take_data)
 
 
         main_box_layout = QVBoxLayout(self)
@@ -1055,6 +1059,42 @@ class CreateDetachment(QWidget):
         main_box_layout.addLayout(in_data_5_layout)
         main_box_layout.addStretch()
         main_box_layout.addWidget(self.save_btn)
+
+    def take_data(self):
+        data_list = []
+        detachment_1_name = self.input_detach_name1.text()
+        data_list.append(detachment_1_name)
+        detachment_1_index = self.input_detach_index1.text()
+        data_list.append(detachment_1_index)
+        detachment_2_name = self.input_detach_name2.text()
+        data_list.append(detachment_2_name)
+        detachment_2_index = self.input_detach_index2.text()
+        data_list.append(detachment_2_index)
+        detachment_3_name = self.input_detach_name3.text()
+        data_list.append(detachment_3_name)
+        detachment_3_index = self.input_detach_index3.text()
+        data_list.append(detachment_3_index)
+        detachment_4_name = self.input_detach_name4.text()
+        data_list.append(detachment_4_name)
+        detachment_4_index = self.input_detach_index4.text()
+        data_list.append(detachment_4_index)
+        detachment_5_name = self.input_detach_name5.text()
+        data_list.append(detachment_5_name)
+        detachment_5_index = self.input_detach_index5.text()
+        data_list.append(detachment_5_index)
+
+        date = (today,)
+
+        detachments = []
+
+        for x, y in zip(data_list[::2], data_list[1::2]):
+            if x != '':
+                temp_tuple = (x, y)
+
+                temp_tuple = temp_tuple + date + val_default
+
+                detachments.append(temp_tuple)
+        add_detachments(detachments)
 
 
 class MainWindow(QMainWindow):#, QDialog):

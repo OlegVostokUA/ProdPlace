@@ -204,7 +204,37 @@ def parse_loss_profit_db(signal, day1, day2):
     records = cursor.fetchall()
     return records
 
+
+def parse_db_names_detach():
+    # функция для извлечения данных из бд отделов и формирования словаря где ключ - имя, значения - индекс отд
+    conn = sqlite3.connect('Database/prod_database.db')
+    cursor = conn.cursor()
+
+    data = ('''SELECT * FROM detach''')
+
+    cursor.execute(data)
+    records = cursor.fetchall()
+    names_index = {}
+
+    for i in records:
+        name = i[0]
+        index = i[1]
+        pair = (name,) + (index,)
+        names_index.update([pair])
+
+    return names_index  # , records
+
 # functions for record in database
+def add_detachments(data):
+    # функция добавления записей в бд
+    conn = sqlite3.connect('Database/prod_database.db')
+    cursor = conn.cursor()
+
+    cursor.executemany('''INSERT INTO detach VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', data)
+
+    conn.commit()
+
+
 def add_n_to_db(signal, number_ch, date_op, val_ch):
     '''
     func for insert loss, menu-loss or profit(signal flag) values
