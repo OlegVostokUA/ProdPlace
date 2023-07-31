@@ -86,7 +86,10 @@ class LossProfitTab(QWidget):
         self.label_detach_list.setText('Оберіть підрозділ:') #
         self.input_detach_list = QComboBox(self)
         names_dict = parse_db_names_detach() ###
-        self.input_detach_list.addItems(list(names_dict.keys()))
+        names_list = list(names_dict.keys())
+        names_list.insert(0, '---')
+        self.input_detach_list.addItems(names_list)
+        #self.input_detach_list.currentTextChanged.connect(self.enabled_)
         # self.input_detach_list = QLineEdit(unk)
         self.label_name = QLabel(self)
         self.label_name.setText('Введіть прізвище, ім’я того, через кого здійснюєтся операція:')
@@ -172,24 +175,29 @@ class LossProfitTab(QWidget):
         for row in range(row_count):  # for column 2
             self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
 
-    def enabled(self):
-        pass
+    def enabled(self, detach):
+        #print(detach)
+        return detach
 
     def push_to_database(self):
+        names_dict = parse_db_names_detach()
         signal = 1
-        checket_btn = self.button_group.checkedButton()
+        index_dtch = (self.input_pidr.text(),)
+        #checket_btn = self.button_group.checkedButton()
         checket_btn_txt = self.button_group.checkedId()
-        print(checket_btn_txt)
-        if checket_btn_txt == 2:
-            #self.input_detach_list.setDisabled(False)
-            signal = 2
-        # print(signal)
-        date = self.input_date.text()
+        if checket_btn_txt == 4:
+            signal = 4
+        elif checket_btn_txt == 2 or checket_btn_txt == 5:
+            name_dtch = self.input_detach_list.currentText()
+            index_dtch = (names_dict.get(name_dtch),)
+            if checket_btn_txt == 2:
+                signal = 2
+            elif checket_btn_txt == 5:
+                signal = 5
 
-        item = self.input_pidr.text()
-        item = int(item)
-        date_op = (date,)
-        number_ch = (item,)
+        date_op = (self.input_date.text(),)
+        number_ch = (self.input_pidr.text(),)
+        index_ch = index_dtch
         column = 2
         data = []
         row_count = len(self.name_lables[0]) - 3
@@ -202,7 +210,11 @@ class LossProfitTab(QWidget):
                 item = 0
             data.append(item)
             val_ch = tuple(data)
-        add_n_to_db(signal, number_ch, date_op, val_ch)
+
+        print(signal, number_ch, index_ch, date_op, val_ch)
+        #add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
+
+
 
 
     def export_to_excel(self):

@@ -235,7 +235,7 @@ def add_detachments(data):
     conn.commit()
 
 
-def add_n_to_db(signal, number_ch, date_op, val_ch):
+def add_n_to_db(signal, number_ch, index_ch, date_op, val_ch):
     '''
     func for insert loss, menu-loss or profit(signal flag) values
     calcuating sum old and new values
@@ -246,12 +246,22 @@ def add_n_to_db(signal, number_ch, date_op, val_ch):
     cursor = conn.cursor()
     signal = signal
     number_ch = number_ch
+    index_ch = index_ch
     val_ch = val_ch
     date_op = date_op
-    almount = number_ch + number_ch + date_op + val_ch # ... + number_ch == index_db
+    almount = number_ch + index_ch + date_op + val_ch # ... + number_ch == index_db
     val = []
     val.append(almount)
+    temp_tuple = ()
+    for i in val_ch:
+        n = i - (i * 2)
+        n = (n,)
+        temp_tuple = temp_tuple + n
+    almount_scnd = number_ch + date_op + temp_tuple
+    val_scnd = []
+    val_scnd.append(almount_scnd)
 
+######
     if signal == 1:
         cursor.executemany(
             "INSERT INTO profit VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -261,14 +271,7 @@ def add_n_to_db(signal, number_ch, date_op, val_ch):
             val)
 
     elif signal == 2 or 3: # or 4 # for loss PODK
-        temp_tuple = ()
-        for i in val_ch:
-            n = i - (i * 2)
-            n = (n,)
-            temp_tuple = temp_tuple + n
-        almount_scnd = number_ch + date_op + temp_tuple
-        val_scnd = []
-        val_scnd.append(almount_scnd)
+
         cursor.executemany(
             "INSERT INTO main_file VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             val_scnd)
