@@ -34,7 +34,7 @@ class Storage(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         # create button
-        self.pushButton = QPushButton('Show table')
+        self.pushButton = QPushButton('Сформувати таблицю')
         self.pushButton.clicked.connect(self.show_table_func)
         # layout box
         vBox = QVBoxLayout(self)
@@ -85,8 +85,7 @@ class LossProfitTab(QWidget):
         self.label_detach_list = QLabel(self)
         self.label_detach_list.setText('Оберіть підрозділ:') #
         self.input_detach_list = QComboBox(self)
-        #self.input_detach_list.setEnabled(False)
-        names_dict = parse_db_names_detach() ###
+        names_dict = parse_db_names_detach()
         names_list = list(names_dict.keys())
         names_list.insert(0, '---')
         self.input_detach_list.addItems(names_list)
@@ -101,13 +100,9 @@ class LossProfitTab(QWidget):
         self.check_op_loss = QRadioButton('Убуток')
         self.check_op_loss_p = QRadioButton('Надійшло від підрозділу')
         self.button_group.addButton(self.check_op_prof, 1)
-        #self.check_op_prof_p.clicked.connect(self.disabled_btn)
         self.button_group.addButton(self.check_op_prof_p, 2)
-        #self.check_op_prof_p.clicked.connect(self.enabled_btn)
         self.button_group.addButton(self.check_op_loss, 4)
-        #self.check_op_prof_p.clicked.connect(self.disabled_btn)
         self.button_group.addButton(self.check_op_loss_p, 5)
-        #self.check_op_prof_p.clicked.connect(self.enabled_btn)
 
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
@@ -159,13 +154,6 @@ class LossProfitTab(QWidget):
         mainLayout.addLayout(button_layout)
 
 
-    # def enabled_btn(self):
-    #     self.input_detach_list.setEnabled(True)
-    #
-    # def disabled_btn(self):
-    #     self.input_detach_list.setEnabled(False)
-
-
     def show_table_func(self):
         """
         function for create and show data from 'main_file' table
@@ -188,20 +176,17 @@ class LossProfitTab(QWidget):
         names_dict = parse_db_names_detach()
         signal = 1
         index_dtch = (self.input_pidr.text(),)
-        #checket_btn = self.button_group.checkedButton()
         checket_btn_txt = self.button_group.checkedId()
         if checket_btn_txt == 4:
             signal = 2
         elif checket_btn_txt == 2 or checket_btn_txt == 5:
             name_dtch = self.input_detach_list.currentText()
             index_dtch = (names_dict.get(name_dtch),)
-
             if checket_btn_txt == 2:
                 signal = 4
             elif checket_btn_txt == 5:
                 signal = 5
 
-        #print(signal)
         date_op = (self.input_date.text(),)
         number_ch = (self.input_pidr.text(),)
         index_ch = index_dtch
@@ -218,11 +203,7 @@ class LossProfitTab(QWidget):
             data.append(item)
             val_ch = tuple(data)
 
-        #print(signal, number_ch, index_ch, date_op, val_ch)
         add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
-
-
-
 
     def export_to_excel(self):
         time_date = time.ctime()
@@ -234,14 +215,13 @@ class LossProfitTab(QWidget):
         row_count = len(self.name_lables[0]) - 2
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
-            df = pd.DataFrame(columns=columnHeaders)#pd.DataFrame(columns=columnHeaders)
+            df = pd.DataFrame(columns=columnHeaders)
         for row in range(row_count):
             for col in range(self.tableWidget.columnCount()):
                 try:
                     temp = self.tableWidget.item(row, col).text()
                 except:
                     temp = 0
-                print(temp)
 
                 df.at[row, columnHeaders[col]] = temp
                 df.to_excel(file)
@@ -302,7 +282,6 @@ class Rozkladka(QWidget):
             val_roz = tuple(data)
             add_values_to_rozclad_db(val_roz)
 
-
     def delete_from_rozclad(self):
         clear_rozclad_db()
 
@@ -336,7 +315,6 @@ class Menu(QWidget):
         default_day = 'Понеділок'
         self.label_day = QLabel(self)
         self.label_day.setText('Введіть день тижня:')
-        # self.input_day = QLineEdit(default_day) # fix on list-down widget
         self.input_day = QComboBox(self)
         self.input_day.addItems(['---', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П’ятниця', 'Субота', 'Неділя'])
         self.input_day.currentTextChanged.connect(self.show_table_func)
@@ -389,7 +367,6 @@ class Menu(QWidget):
         self.tableWidget_2.setRowCount(5)
         day = day
         day = (day,)
-        # print(day, type(day))
         self.rows = parse_day_rozklad(day)
         self.rows_dinner = parse_day_dinner_rozklad(day)
         row = -1
@@ -430,12 +407,12 @@ class Menu(QWidget):
         for i in sum_colls:
             total = round(i * count_ppl, 3)
             total_colls.append(total)
-        coll = 2
+        coll = 3
         for i in sum_colls:
             temp = i
             coll = coll + 1
             self.tableWidget.setItem(9, coll, QTableWidgetItem(str(temp)))
-        coll = 2
+        coll = 3
         for i in total_colls:
             temp = i
             coll = coll + 1
@@ -459,12 +436,12 @@ class Menu(QWidget):
         for i in sum_colls_d:
             total = round(i * count_ppl_d, 3)
             total_colls_d.append(total)
-        coll = 2
+        coll = 3
         for i in sum_colls_d:
             temp = i
             coll = coll + 1
             self.tableWidget_2.setItem(3, coll, QTableWidgetItem(str(temp)))
-        coll = 2
+        coll = 3
         for i in total_colls_d:
             temp = i
             coll = coll + 1
@@ -472,17 +449,15 @@ class Menu(QWidget):
 
     def push_to_database(self):
         signal = 3
-        date = self.input_date.text()
+        date = (self.input_date.text(),)
         item = self.input_ppl.text()
+        ppl = (self.input_ppl.text(),)
         item_d = self.input_ppl_d.text()
-        date_op = (date,)
-        item = int(item)
-        item_d = int(item_d)
-        ppl = (item,)
-        ppl_d = (item_d,)
+        ppl_d = (self.input_ppl_d.text(),)
+        day_of_week = (self.input_day.currentText(),)
         row = 10
         data = []
-        for coll in range(3, self.tableWidget.columnCount()):  # (3, self...)
+        for coll in range(4, self.tableWidget.columnCount()):  # (3, self...)
             if self.tableWidget.item(row, coll) is not None:
                 item = self.tableWidget.item(row, coll).text()
                 item = float(item)
@@ -490,11 +465,11 @@ class Menu(QWidget):
                 item = 0
             data.append(item)
             val_ch = tuple(data)
-        add_n_to_db(signal, ppl, date_op, val_ch)
+        add_n_to_db(signal, day_of_week, ppl, date, val_ch)
 
         row_d = 4
         data_d = []
-        for coll in range(3, self.tableWidget_2.columnCount()):  # (3, self...)
+        for coll in range(4, self.tableWidget_2.columnCount()):  # (3, self...)
             if self.tableWidget_2.item(row_d, coll) is not None:
                 item = self.tableWidget_2.item(row_d, coll).text()
                 item = float(item)
@@ -502,7 +477,7 @@ class Menu(QWidget):
                 item = 0
             data_d.append(item)
             val_ch_d = tuple(data_d)
-        add_n_to_db(signal, ppl_d, date_op, val_ch_d)
+        add_n_to_db(signal, day_of_week, ppl_d, date, val_ch_d)
 
     def export_to_excel(self):
         timedate = time.ctime()
@@ -545,10 +520,10 @@ class MenuZvit(QWidget):
         super(MenuZvit, self).__init__()
         self.parent = parent
         self.names_columns = parse_column_db()[0]
+        day_of_week = ('День тижня',)
         ppl_col_name = ('Кількість людей',)
-        self.names_columns = self.names_columns[1::]
-        self.names_columns = ppl_col_name+self.names_columns
-        #print(self.names_columns)
+        self.names_columns = self.names_columns[2::]
+        self.names_columns = day_of_week+ppl_col_name+self.names_columns
         # create input date labels
         self.label_date1 = QLabel(self)
         self.label_date1.setText('Введіть початкову дату операції:')
@@ -599,7 +574,7 @@ class MenuZvit(QWidget):
                 count = count+1
         sum_colls = []
         total_colls = []
-        for coll in range(2, self.tableWidget.columnCount()):
+        for coll in range(3, self.tableWidget.columnCount()):
             data = []
             for row in range(0, len(self.rows)):
                 if self.tableWidget.item(row, coll) is not None:
@@ -611,7 +586,7 @@ class MenuZvit(QWidget):
                 data.append(item)
             sum_collumn = sum(data)
             sum_colls.append(sum_collumn)
-        coll = 2
+        coll = 3
         for i in sum_colls:
             temp = i
             temp = round(temp, 3)
@@ -798,7 +773,7 @@ class Bread(QWidget):
         val_ch = bread + zero
         number_ch = index
         signal = 1
-        add_n_to_db(signal, number_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
         signal = 2
         wheat = (data_baker[1],)
         oil = (data_baker[8],)
@@ -810,7 +785,7 @@ class Bread(QWidget):
         zero4 = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         zero5 = (0, 0, 0, 0, 0, 0, 0, 0)
         val_ch = zero1 + oil + zero2 + wheat + zero3 + salt + zero4 + yeast + zero5
-        add_n_to_db(signal, number_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
 
     def export_to_excel(self):
         time_date = time.ctime()
@@ -904,7 +879,6 @@ class ProfitLossZvit(QWidget):
         self.names_columns = parse_column_db()[0]
         self.names_columns = self.names_columns[1::]
         # self.names_columns = ppl_col_name+self.names_columns
-        #print(self.names_columns)
         # create input date labels
         self.label_date1 = QLabel(self)
         self.label_date1.setText('Введіть початкову дату операції:')
@@ -1121,24 +1095,23 @@ class MainWindow(QMainWindow):#, QDialog):
     MAIN window Class
     """
     def __init__(self):
-        # "__init__" func for initialization widgets and properties
         super().__init__() # initialization widgets and properties Parent class "QDialog"
         # in here we set widgets and set properties
         self.setWindowTitle("My App") # title of app
-        self.resize(950, 1000) # set size window
+        self.resize(1050, 1000) # set size window
         font = QFont("Times New Roman", 14, 75, True) # set font window
         # add widgets
         self.main_widget = QTabWidget()
         self.setCentralWidget(self.main_widget)
-        self.main_widget.addTab(Storage(), "Storage")
-        self.main_widget.addTab(LossProfitTab(), "Loss Profit Tab")
-        self.main_widget.addTab(Rozkladka(), "Rozcladka")
-        self.main_widget.addTab(Menu(), "Menu")
-        self.main_widget.addTab(MenuZvit(), "Menu Zvit")
-        self.main_widget.addTab(Bread(), "Bread")
-        self.main_widget.addTab(BreadZvit(), "BreadZvit")
-        self.main_widget.addTab(ProfitLossZvit(), "ProfitLossZvit")
-        self.main_widget.addTab(CreateDetachment(), "CreateDetachments")
+        self.main_widget.addTab(Storage(), "Залишки (Склад)")
+        self.main_widget.addTab(LossProfitTab(), "Прихід / Розхід")
+        self.main_widget.addTab(Rozkladka(), "Розкладка")
+        self.main_widget.addTab(Menu(), "Меню-вимога")
+        self.main_widget.addTab(MenuZvit(), "Меню-вимога (Звіт)")
+        self.main_widget.addTab(Bread(), "Хлібопечення")
+        self.main_widget.addTab(BreadZvit(), "Хлібопечення (Звіт)")
+        self.main_widget.addTab(ProfitLossZvit(), "Прихід / Розхід (Звіт)")
+        self.main_widget.addTab(CreateDetachment(), "Додати підрозділи")
 
 
 ### Final App Block ###
