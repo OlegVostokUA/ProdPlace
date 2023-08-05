@@ -1122,5 +1122,3 @@ if __name__ == '__main__':
     # dlgMain.setWindowIcon(QtGui.QIcon('icon.png'))
     dlgMain.show() # show function
     sys.exit(app.exec_())  # loop app in "sys.exit" func for check logs
-
-

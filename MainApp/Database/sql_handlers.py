@@ -1,7 +1,4 @@
 import sqlite3
-import pandas as pd
-import time
-
 
 names_production = ('Назва підрозділу', 'Індекс підрозділу', 'Дата', 'Хліб', 'М’ясо яловичина, свинина(тущі, напівтущі, чверть)',
                     'М’ясні блоки яловичина, свинина', 'М’ясо птиці', 'Сосиски, сардельки', 'Печінка',
@@ -66,7 +63,6 @@ def conn_db():
     cursor.execute(sqlite_create_table_query9)
     cursor.execute(sqlite_create_table_query10)
     cursor.execute(sqlite_create_table_query11)
-
 
     sqlite_connection.commit()
 
@@ -169,7 +165,7 @@ def parse_menu_loss_db(day1, day2):
     dd = day1+day2
     conn = sqlite3.connect("Database/prod_database.db")
     cursor = conn.cursor()
-    data = ('''SELECT * FROM menu_loss WHERE дата BETWEEN ? AND ?''') #BETWEEN LIKE = ? AND LIKE = ? ORDER BY dateRec
+    data = ('''SELECT * FROM menu_loss WHERE дата BETWEEN ? AND ?''')
     cursor.execute(data, (dd))
     records = cursor.fetchall()
     return records
@@ -196,10 +192,10 @@ def parse_loss_profit_db(signal, day1, day2):
     conn = sqlite3.connect("Database/prod_database.db")
     cursor = conn.cursor()
     if signal == 1:
-        data = ('''SELECT * FROM profit WHERE дата BETWEEN ? AND ?''') #BETWEEN LIKE = ? AND LIKE = ? ORDER BY dateRec
+        data = ('''SELECT * FROM profit WHERE дата BETWEEN ? AND ?''')
         cursor.execute(data, (dd))
     elif signal == 2:
-        data = ('''SELECT * FROM loss WHERE дата BETWEEN ? AND ?''') #BETWEEN LIKE = ? AND LIKE = ? ORDER BY dateRec
+        data = ('''SELECT * FROM loss WHERE дата BETWEEN ? AND ?''')
         cursor.execute(data, (dd))
     records = cursor.fetchall()
     return records
@@ -222,7 +218,7 @@ def parse_db_names_detach():
         pair = (name,) + (index,)
         names_index.update([pair])
 
-    return names_index  # , records
+    return names_index
 
 # functions for record in database
 def add_detachments(data):
@@ -249,7 +245,7 @@ def add_n_to_db(signal, number_ch, index_ch, date_op, val_ch):
     index_ch = index_ch
     val_ch = val_ch
     date_op = date_op
-    almount = number_ch + index_ch + date_op + val_ch # ... + number_ch == index_db
+    almount = number_ch + index_ch + date_op + val_ch
     val = []
     val.append(almount)
     temp_tuple = ()
@@ -283,7 +279,7 @@ def add_n_to_db(signal, number_ch, index_ch, date_op, val_ch):
                 "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 val_scnd)
 
-    elif signal == 2 or signal == 3 or signal == 4: # or 4 # for loss PODK
+    elif signal == 2 or signal == 3 or signal == 4:
 
         cursor.executemany(
             "INSERT INTO main_file VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
@@ -334,9 +330,7 @@ def add_n_to_db(signal, number_ch, index_ch, date_op, val_ch):
     date_opn = date_opn[0]
     amount_sum = number + index + date_opn
 
-    # name_db_pidr = 'menu_loss'
     data_db = ('''pragma table_info(main_file); ''')
-    # data_db_pidr = ('''pragma table_info('''+name_db_pidr+'''); ''')
     cursor.execute(data_db)
     names_column_db = cursor.fetchall()
 
@@ -385,9 +379,7 @@ def add_n_to_db(signal, number_ch, index_ch, date_op, val_ch):
         date_opn = date_opn[0]
         amount_sum = number + index + date_opn
 
-        # name_db_pidr = 'menu_loss'
         data_db = ('''pragma table_info(detach_temp); ''')
-        # data_db_pidr = ('''pragma table_info('''+name_db_pidr+'''); ''')
         cursor.execute(data_db)
         names_column_db = cursor.fetchall()
 
@@ -443,9 +435,7 @@ def add_bread_baking(date_op, val_chs):
 
     conn.commit()
 
-
 # functions for delete from databases
-
 def clear_rozclad_db():
     '''
     func for clear old values of rozclad_db
@@ -454,4 +444,4 @@ def clear_rozclad_db():
     cursor = conn.cursor()
     cursor.execute("DELETE FROM rozklad_db ;")
     conn.commit()
-    print('deleted')
+
