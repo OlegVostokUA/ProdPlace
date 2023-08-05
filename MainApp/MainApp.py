@@ -85,26 +85,30 @@ class LossProfitTab(QWidget):
         self.label_detach_list = QLabel(self)
         self.label_detach_list.setText('Оберіть підрозділ:') #
         self.input_detach_list = QComboBox(self)
+        #self.input_detach_list.setEnabled(False)
         names_dict = parse_db_names_detach() ###
         names_list = list(names_dict.keys())
         names_list.insert(0, '---')
         self.input_detach_list.addItems(names_list)
-        #self.input_detach_list.currentTextChanged.connect(self.enabled_)
-        # self.input_detach_list = QLineEdit(unk)
         self.label_name = QLabel(self)
         self.label_name.setText('Введіть прізвище, ім’я того, через кого здійснюєтся операція:')
         self.input_name = QLineEdit(unk)
         self.label_operation = QLabel(self)
         self.label_operation.setText("Оберіть тип операції")
         self.button_group = QButtonGroup()
-        self.check_op_prof = QRadioButton('Profit')
-        self.check_op_prof_p = QRadioButton('Profit of PODK')
-        self.check_op_loss = QRadioButton('Loss')
-        self.check_op_loss_p = QRadioButton('Loss of PODK')
+        self.check_op_prof = QRadioButton('Прибуток')
+        self.check_op_prof_p = QRadioButton('Видано у підрозділ')
+        self.check_op_loss = QRadioButton('Убуток')
+        self.check_op_loss_p = QRadioButton('Надійшло від підрозділу')
         self.button_group.addButton(self.check_op_prof, 1)
+        #self.check_op_prof_p.clicked.connect(self.disabled_btn)
         self.button_group.addButton(self.check_op_prof_p, 2)
+        #self.check_op_prof_p.clicked.connect(self.enabled_btn)
         self.button_group.addButton(self.check_op_loss, 4)
+        #self.check_op_prof_p.clicked.connect(self.disabled_btn)
         self.button_group.addButton(self.check_op_loss_p, 5)
+        #self.check_op_prof_p.clicked.connect(self.enabled_btn)
+
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
@@ -116,10 +120,6 @@ class LossProfitTab(QWidget):
         self.save_to_db.clicked.connect(self.push_to_database)
         self.form_excel = QPushButton('Формувати у Excel')
         self.form_excel.clicked.connect(self.export_to_excel)
-
-        # self.connect(self.check_op_loss, QtCore.SIGNAL('clicked()'), self.input_detach_list, QtCore.SLOT('setDisabled()'))
-
-
 
         # layout box
         mainLayout = QVBoxLayout(self)
@@ -141,9 +141,9 @@ class LossProfitTab(QWidget):
         in_opper_type_layout = QHBoxLayout(self)
         in_opper_type_layout.addWidget(self.label_operation)
         in_opper_type_layout.addWidget(self.check_op_prof)
-        in_opper_type_layout.addWidget(self.check_op_prof_p)
-        in_opper_type_layout.addWidget(self.check_op_loss)
         in_opper_type_layout.addWidget(self.check_op_loss_p)
+        in_opper_type_layout.addWidget(self.check_op_loss)
+        in_opper_type_layout.addWidget(self.check_op_prof_p)
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.save_to_db)
@@ -157,6 +157,14 @@ class LossProfitTab(QWidget):
         mainLayout.addLayout(in_name_layout)
         mainLayout.addWidget(self.tableWidget)
         mainLayout.addLayout(button_layout)
+
+
+    # def enabled_btn(self):
+    #     self.input_detach_list.setEnabled(True)
+    #
+    # def disabled_btn(self):
+    #     self.input_detach_list.setEnabled(False)
+
 
     def show_table_func(self):
         """
@@ -175,9 +183,6 @@ class LossProfitTab(QWidget):
         for row in range(row_count):  # for column 2
             self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
 
-    def enabled(self, detach):
-        #print(detach)
-        return detach
 
     def push_to_database(self):
         names_dict = parse_db_names_detach()
@@ -186,15 +191,17 @@ class LossProfitTab(QWidget):
         #checket_btn = self.button_group.checkedButton()
         checket_btn_txt = self.button_group.checkedId()
         if checket_btn_txt == 4:
-            signal = 4
+            signal = 2
         elif checket_btn_txt == 2 or checket_btn_txt == 5:
             name_dtch = self.input_detach_list.currentText()
             index_dtch = (names_dict.get(name_dtch),)
+
             if checket_btn_txt == 2:
-                signal = 2
+                signal = 4
             elif checket_btn_txt == 5:
                 signal = 5
 
+        #print(signal)
         date_op = (self.input_date.text(),)
         number_ch = (self.input_pidr.text(),)
         index_ch = index_dtch
@@ -211,8 +218,8 @@ class LossProfitTab(QWidget):
             data.append(item)
             val_ch = tuple(data)
 
-        print(signal, number_ch, index_ch, date_op, val_ch)
-        #add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
+        #print(signal, number_ch, index_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
 
 
 
