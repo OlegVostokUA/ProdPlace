@@ -1169,7 +1169,9 @@ class MainWindow(QMainWindow):#, QDialog):
     def __init__(self):
         super().__init__() # initialization widgets and properties Parent class "QDialog"
         # in here we set widgets and set properties
-        self.setWindowTitle("My App") # title of app
+        self.setWindowTitle('eBook')
+        self.setWindowIcon(QtGui.QIcon('icons/main.png'))
+        #self.setWindowTitle("My App") # title of app
         self.resize(1150, 1000) # set size window
         font = QFont("Times New Roman", 14, 75, True) # set font window
 
@@ -1188,11 +1190,10 @@ class MainWindow(QMainWindow):#, QDialog):
         self.main_widget.addTab(CreateDetachment(), "Додати підрозділи")
 
 
+
 ### Final App Block ###
 if __name__ == '__main__':
     app = QApplication(sys.argv)  # create app
     dlgMain = MainWindow() # build object of class "DlgMain" and set here in variable "dlgMain"
-    dlgMain.setWindowTitle('eBook')
-    dlgMain.setWindowIcon(QtGui.QIcon('icons/main.png'))
     dlgMain.show() # show function
     sys.exit(app.exec_())  # loop app in "sys.exit" func for check logs
