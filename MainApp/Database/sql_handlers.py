@@ -201,6 +201,20 @@ def parse_loss_profit_db(signal, day1, day2):
     return records
 
 
+def parse_db_detach():
+    # функция для извлечения данных из бд отделов
+    conn = sqlite3.connect('Database/prod_database.db') # Database/prod_database.db
+    cursor = conn.cursor()
+
+    data = ('''SELECT * FROM detach''')
+
+    cursor.execute(data)
+    records = cursor.fetchall()
+
+    #print(records)
+    return records
+
+
 def parse_db_names_detach():
     # функция для извлечения данных из бд отделов и формирования словаря где ключ - имя, значения - индекс отд
     conn = sqlite3.connect('Database/prod_database.db')

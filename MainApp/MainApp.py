@@ -3,7 +3,8 @@ from datetime import datetime, time
 import pandas as pd
 from PyQt5.QtGui import QFont# QIcon, QPixmap,
 from PyQt5.QtWidgets import *
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtGui
+
 
 import Database.sql_handlers
 from Database.sql_handlers import *
@@ -23,8 +24,10 @@ val_default = Database.sql_handlers.val_zag
 
 class Storage(QWidget):
 
+
     def __init__(self, parent=None):
         super(Storage, self).__init__()
+
         self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
@@ -34,7 +37,8 @@ class Storage(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         # create button
-        self.pushButton = QPushButton('Сформувати таблицю')
+        self.pushButton = QPushButton('   Сформувати таблицю')
+        self.pushButton.setIcon(QtGui.QIcon('icons/computer.png'))
         self.pushButton.clicked.connect(self.show_table_func)
         # layout box
         vBox = QVBoxLayout(self)
@@ -109,11 +113,14 @@ class LossProfitTab(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
         self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
         # create buttons
-        self.form_table = QPushButton('Сформувати таблицю')
+        self.form_table = QPushButton('   Сформувати таблицю')
+        self.form_table.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_table.clicked.connect(self.show_table_func)
-        self.save_to_db = QPushButton('Зберегти у Базу Даних')
+        self.save_to_db = QPushButton('   Зберегти у Базу Даних')
+        self.save_to_db.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_to_db.clicked.connect(self.push_to_database)
-        self.form_excel = QPushButton('Формувати у Excel')
+        self.form_excel = QPushButton('   Формувати у Excel')
+        self.form_excel.setIcon(QtGui.QIcon('icons/excel.png'))
         self.form_excel.clicked.connect(self.export_to_excel)
 
         # layout box
@@ -244,9 +251,11 @@ class Rozkladka(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
         # create buttons
-        self.form_table = QPushButton('Сформувати таблицю')
+        self.form_table = QPushButton('   Сформувати таблицю')
+        self.form_table.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_table.clicked.connect(self.show_table_func)
-        self.save_to_db = QPushButton('Зберегти у Базу Даних')
+        self.save_to_db = QPushButton('   Зберегти у Базу Даних')
+        self.save_to_db.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_to_db.clicked.connect(self.delete_from_rozclad)
         self.save_to_db.clicked.connect(self.push_to_database)
 
@@ -329,11 +338,14 @@ class Menu(QWidget):
         # create buttons
         # self.form_table = QPushButton('Сформувати таблицю')
         # self.form_table.clicked.connect(self.show_table_func)
-        self.calculate = QPushButton('Розрахувати')
+        self.calculate = QPushButton('   Розрахувати')
+        self.calculate.setIcon(QtGui.QIcon('icons/calculate.png'))
         self.calculate.clicked.connect(self.calculate_result)
-        self.save_to_db = QPushButton('Зберегти у Базу Даних')
+        self.save_to_db = QPushButton('   Зберегти у Базу Даних')
+        self.save_to_db.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_to_db.clicked.connect(self.push_to_database)
-        self.to_excell = QPushButton('Формувати у Excel')
+        self.to_excell = QPushButton('   Формувати у Excel')
+        self.to_excell.setIcon(QtGui.QIcon('icons/excel.png'))
         self.to_excell.clicked.connect(self.export_to_excel)
 
         main_v_box = QVBoxLayout(self)
@@ -537,9 +549,11 @@ class MenuZvit(QWidget):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
         # create button box
-        self.form_button = QPushButton('Сформувати таблицю')
+        self.form_button = QPushButton('   Сформувати таблицю')
+        self.form_button.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_button.clicked.connect(self.show_table_func)
-        self.excel_button = QPushButton('Формувати у Excel')
+        self.excel_button = QPushButton('   Формувати у Excel')
+        self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_box_layout = QVBoxLayout(self)
@@ -638,13 +652,17 @@ class Bread(QWidget):
         self.tableWidget_2.setHorizontalHeaderLabels(self.name_lables_two)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(160)
         # create buttons
-        self.form_table_button = QPushButton('Сформувати таблицю')
+        self.form_table_button = QPushButton('   Сформувати таблицю')
+        self.form_table_button.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_table_button.clicked.connect(self.show_table_func)
-        self.calculate_button = QPushButton('Провести розрахунок')
+        self.calculate_button = QPushButton('   Провести розрахунок')
+        self.calculate_button.setIcon(QtGui.QIcon('icons/calculate.png'))
         self.calculate_button.clicked.connect(self.calculate_result)
-        self.save_to_db_button = QPushButton('Зберегти у Базу Даних')
+        self.save_to_db_button = QPushButton('   Зберегти у Базу Даних')
+        self.save_to_db_button.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_to_db_button.clicked.connect(self.push_to_database)
-        self.excel_button = QPushButton('Формувати у Excel')
+        self.excel_button = QPushButton('   Формувати у Excel')
+        self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_layout = QVBoxLayout(self)
@@ -821,9 +839,11 @@ class BreadZvit(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(self.name_lables_one)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(80)
         # create buttons
-        self.form_table_button = QPushButton('Сформувати таблицю')
+        self.form_table_button = QPushButton('   Сформувати таблицю')
+        self.form_table_button.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_table_button.clicked.connect(self.show_table_func)
-        self.excel_button = QPushButton('Формувати у Excel')
+        self.excel_button = QPushButton('   Формувати у Excel')
+        self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_layout = QVBoxLayout(self)
@@ -897,9 +917,11 @@ class ProfitLossZvit(QWidget):
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
 
         # create button box
-        self.form_button = QPushButton('Сформувати таблицю')
+        self.form_button = QPushButton('   Сформувати таблицю')
+        self.form_button.setIcon(QtGui.QIcon('icons/computer.png'))
         self.form_button.clicked.connect(self.show_table_func)
-        self.excel_button = QPushButton('Формувати у Excel')
+        self.excel_button = QPushButton('   Формувати у Excel')
+        self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_box_layout = QVBoxLayout(self)
@@ -1090,6 +1112,56 @@ class CreateDetachment(QWidget):
         add_detachments(detachments)
 
 
+class Leftovers(QWidget):
+
+    def __init__(self, parent=None):
+        super(Leftovers, self).__init__()
+        self.parent = parent
+        # parse database
+        self.name_lables = parse_column_db()
+        self.rows = parse_db_detach()
+        names_dict = parse_db_names_detach()
+        names_list = list(names_dict.keys())
+        # create table widget
+        self.tableWidget = QTableWidget(0, len(names_list)+2)  # rows, columns
+        self.tableWidget.setHorizontalHeaderLabels(header_labels[:2]+names_list) # + headers of columns on table
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(150)
+        # create button
+        self.pushButton = QPushButton('   Сформувати таблицю')
+        self.pushButton.setIcon(QtGui.QIcon('icons/computer.png'))
+        self.pushButton.clicked.connect(self.show_table_func)
+        # layout box
+        vBox = QVBoxLayout(self)
+        vBox.addWidget(self.tableWidget)
+        vBox.addWidget(self.pushButton)
+
+    def show_table_func(self):
+        row_count = len(self.name_lables[0]) - 3
+        self.tableWidget.setRowCount(row_count)
+        # save tuples of values
+        self.names = self.name_lables[0] #
+        self.values = self.rows
+        names_numb = 3
+        for row in range(row_count): # for column 1
+            self.tableWidget.setItem(row, 0, QTableWidgetItem(str(self.names[names_numb])))
+            names_numb = names_numb+1
+        for row in range(row_count): # for column 2
+            self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
+
+        column = 1
+        for i in self.rows:
+            temp = i[2:]
+            column = column + 1
+            row = -1
+            for j in temp:
+                self.tableWidget.setItem(row, column, QTableWidgetItem(str(j)))
+                row = row+1
+
+
+
+
+
+
 class MainWindow(QMainWindow):#, QDialog):
     """
     MAIN window Class
@@ -1098,8 +1170,9 @@ class MainWindow(QMainWindow):#, QDialog):
         super().__init__() # initialization widgets and properties Parent class "QDialog"
         # in here we set widgets and set properties
         self.setWindowTitle("My App") # title of app
-        self.resize(1050, 1000) # set size window
+        self.resize(1150, 1000) # set size window
         font = QFont("Times New Roman", 14, 75, True) # set font window
+
         # add widgets
         self.main_widget = QTabWidget()
         self.setCentralWidget(self.main_widget)
@@ -1111,6 +1184,7 @@ class MainWindow(QMainWindow):#, QDialog):
         self.main_widget.addTab(Bread(), "Хлібопечення")
         self.main_widget.addTab(BreadZvit(), "Хлібопечення (Звіт)")
         self.main_widget.addTab(ProfitLossZvit(), "Прихід / Розхід (Звіт)")
+        self.main_widget.addTab(Leftovers(), "Залишки ПОДК")
         self.main_widget.addTab(CreateDetachment(), "Додати підрозділи")
 
 
@@ -1119,6 +1193,6 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)  # create app
     dlgMain = MainWindow() # build object of class "DlgMain" and set here in variable "dlgMain"
     dlgMain.setWindowTitle('eBook')
-    # dlgMain.setWindowIcon(QtGui.QIcon('icon.png'))
+    dlgMain.setWindowIcon(QtGui.QIcon('icons/main.png'))
     dlgMain.show() # show function
     sys.exit(app.exec_())  # loop app in "sys.exit" func for check logs
