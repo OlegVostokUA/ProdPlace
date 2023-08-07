@@ -5,9 +5,8 @@ from PyQt5.QtGui import QFont# QIcon, QPixmap,
 from PyQt5.QtWidgets import *
 from PyQt5 import QtCore, QtGui
 
-
-import Database.sql_handlers
-from Database.sql_handlers import *
+import Database_handlers
+from Database_handlers.sql_handlers import *
 
 
 ### Constants ###
@@ -19,7 +18,7 @@ columns_for_rozclad = ('День тижня', 'Прийом їжі', 'Страв
 columns_bread = ['Дата', 'Витрачено \nборошна', 'Отримано \nхліба', 'Вихід \nплановий \n(%)', 'Вихід \nфактичний \n(%)', 'Олія\nза нормою\nв кг', 'Олія\nза нормою\nв %', 'Олія\nфактично\nв кг', 'Олія\nфактично\nв %', 'Сіль\nза нормою\nв кг', 'Сіль\nза нормою\nв %', 'Сіль\nфактично\nв кг', 'Сіль\nфактично\nв %', 'Дріжджі\nза нормою\nв кг', 'Дріжджі\nза нормою\nв %', 'Дріжджі\nфактично\nв кг', 'Дріжджі\nфактично\nв %']
 columns_bread_act = ['Найменування \nматеріальних \nзасобів', 'Одиниця \nвиімру', 'Витрачено \nсировини', 'ціна \nза од.', 'Отримано \nпродукції', 'ціна \nза од.']
 rows_bread_act = ['Борошно пшеничне \nІ гат', 'Дріжджі сухі', 'Олія', 'Сіль', 'Хліб пшеничний \nз борошна І гат.', 'ВСЬОГО:']
-val_default = Database.sql_handlers.val_zag
+val_default = Database_handlers.sql_handlers.val_zag
 
 
 class Storage(QWidget):
