@@ -1029,7 +1029,8 @@ class CreateDetachment(QWidget):
         self.label_detach_index5.setText('Введіть індекс підрозділу:')
         self.input_detach_index5 = QLineEdit(self)
 
-        self.save_btn = QPushButton('Зберегти у базу даних')
+        self.save_btn = QPushButton('   Зберегти у базу даних')
+        self.save_btn.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_btn.clicked.connect(self.take_data)
 
 
@@ -1130,10 +1131,16 @@ class Leftovers(QWidget):
         self.pushButton = QPushButton('   Сформувати таблицю')
         self.pushButton.setIcon(QtGui.QIcon('icons/computer.png'))
         self.pushButton.clicked.connect(self.show_table_func)
+        self.excel_button = QPushButton('   Формувати у Excel')
+        self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
+        self.excel_button.clicked.connect(self.export_to_excel)
         # layout box
         vBox = QVBoxLayout(self)
         vBox.addWidget(self.tableWidget)
-        vBox.addWidget(self.pushButton)
+        vBtn = QHBoxLayout(self)
+        vBtn.addWidget(self.pushButton)
+        vBtn.addWidget(self.excel_button)
+        vBox.addLayout(vBtn)
 
     def show_table_func(self):
         row_count = len(self.name_lables[0]) - 3
@@ -1157,9 +1164,22 @@ class Leftovers(QWidget):
                 self.tableWidget.setItem(row, column, QTableWidgetItem(str(j)))
                 row = row+1
 
-
-
-
+    def export_to_excel(self):
+        data = today
+        format_file = '.xlsx'
+        file = 'Залишки станом на ' + data + format_file
+        columnHeaders = []
+        for j in range(self.tableWidget.model().columnCount()):
+            columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
+            df = pd.DataFrame(columns=columnHeaders)
+        for row in range(self.tableWidget.rowCount()):
+            for col in range(self.tableWidget.columnCount()):
+                try:
+                    temp = self.tableWidget.item(row, col).text()
+                except:
+                    temp = 0
+                df.at[row, columnHeaders[col]] = temp
+                df.to_excel(file)
 
 
 class MainWindow(QMainWindow):#, QDialog):
@@ -1174,7 +1194,6 @@ class MainWindow(QMainWindow):#, QDialog):
         #self.setWindowTitle("My App") # title of app
         self.resize(1150, 1000) # set size window
         font = QFont("Times New Roman", 14, 75, True) # set font window
-
         # add widgets
         self.main_widget = QTabWidget()
         self.setCentralWidget(self.main_widget)
