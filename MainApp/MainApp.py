@@ -30,11 +30,11 @@ class Storage(QWidget):
         self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
-        self.rows = parse_db()
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(200)
+        self.tableWidget.setColumnWidth(0, 350)
         # create button
         self.pushButton = QPushButton('   Сформувати таблицю')
         self.pushButton.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -49,6 +49,7 @@ class Storage(QWidget):
         function for create and show data from 'main_file' table
         '''
         # table settings
+        self.rows = parse_db()
         row_count = len(self.name_lables[0]) - 3
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
@@ -77,8 +78,10 @@ class LossProfitTab(QWidget):
         # create input fields
         self.label_date = QLabel(self)
         self.label_date.setText('Введіть дату операції:')
-        self.input_date = QLineEdit(today)
-        unk = '1111'#'UNKNOWN'
+        self.input_date = QDateEdit(self)
+        self.input_date.setCalendarPopup(True)
+        self.input_date.setDate(datetime.today())
+        unk = 'UNKNOWN'#'UNKNOWN'
         self.label_pidr = QLabel(self)
         self.label_pidr.setText('Введіть номер військової частини:') #
         self.input_pidr = QLineEdit(unk)
@@ -106,11 +109,11 @@ class LossProfitTab(QWidget):
         self.button_group.addButton(self.check_op_prof_p, 2)
         self.button_group.addButton(self.check_op_loss, 4)
         self.button_group.addButton(self.check_op_loss_p, 5)
-
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(300)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(200)
+        self.tableWidget.setColumnWidth(0, 350)
         # create buttons
         self.form_table = QPushButton('   Сформувати таблицю')
         self.form_table.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -124,9 +127,10 @@ class LossProfitTab(QWidget):
 
         # layout box
         mainLayout = QVBoxLayout(self)
+
         in_date_layout = QHBoxLayout(self)
         in_date_layout.addWidget(self.label_date)
-        in_date_layout.addWidget(self.input_date)
+        in_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
         in_pidr_layout = QHBoxLayout(self)
         in_pidr_layout.addWidget(self.label_pidr)
         in_pidr_layout.addWidget(self.input_pidr)
@@ -135,16 +139,18 @@ class LossProfitTab(QWidget):
         in_pidr_name_layout.addWidget(self.input_pidr_name)
         in_detach_list_layout = QHBoxLayout(self)
         in_detach_list_layout.addWidget(self.label_detach_list)
-        in_detach_list_layout.addWidget(self.input_detach_list)
+        in_detach_list_layout.addWidget(self.input_detach_list, QtCore.Qt.AlignLeft)
         in_name_layout = QHBoxLayout(self)
         in_name_layout.addWidget(self.label_name)
         in_name_layout.addWidget(self.input_name)
+
         in_opper_type_layout = QHBoxLayout(self)
         in_opper_type_layout.addWidget(self.label_operation)
         in_opper_type_layout.addWidget(self.check_op_prof)
         in_opper_type_layout.addWidget(self.check_op_loss_p)
         in_opper_type_layout.addWidget(self.check_op_loss)
         in_opper_type_layout.addWidget(self.check_op_prof_p)
+
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.save_to_db)
@@ -248,7 +254,8 @@ class Rozkladka(QWidget):
         column_count = len(self.names_columns)
         self.tableWidget = QTableWidget(0, column_count)
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
+        self.tableWidget.setColumnWidth(2, 300)
         # create buttons
         self.form_table = QPushButton('   Сформувати таблицю')
         self.form_table.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -313,7 +320,11 @@ class Menu(QWidget):
         # create input fields
         self.label_date = QLabel(self)
         self.label_date.setText('Введіть дату операції:')
-        self.input_date = QLineEdit(today)
+
+        self.input_date = QDateEdit(self)
+        self.input_date.setCalendarPopup(True)
+        self.input_date.setDate(datetime.today())
+
         self.label_ppl = QLabel(self)
         self.label_ppl.setText('Введіть кількість людей:')
         self.input_ppl = QLineEdit(zero_people)
@@ -329,11 +340,13 @@ class Menu(QWidget):
         # create tables
         self.tableWidget = QTableWidget(0, column_count)
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
+        self.tableWidget.setColumnWidth(2, 300)
         # 2
         self.tableWidget_2 = QTableWidget(0, column_count)
         self.tableWidget_2.setHorizontalHeaderLabels(self.names_columns)
-        self.tableWidget_2.horizontalHeader().setDefaultSectionSize(120)
+        self.tableWidget_2.horizontalHeader().setDefaultSectionSize(100)
+        self.tableWidget_2.setColumnWidth(2, 300)
         # create buttons
         # self.form_table = QPushButton('Сформувати таблицю')
         # self.form_table.clicked.connect(self.show_table_func)
@@ -350,7 +363,7 @@ class Menu(QWidget):
         main_v_box = QVBoxLayout(self)
         in_date_layout = QHBoxLayout(self) #1
         in_date_layout.addWidget(self.label_date)
-        in_date_layout.addWidget(self.input_date)
+        in_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
         in_ppl_all_layout = QHBoxLayout(self)#2
         in_ppl_all_layout.addWidget(self.label_ppl)
         in_ppl_all_layout.addWidget(self.input_ppl)
@@ -359,7 +372,7 @@ class Menu(QWidget):
         in_ppl_d_layout.addWidget(self.input_ppl_d)
         in_day_layout = QHBoxLayout(self)#4
         in_day_layout.addWidget(self.label_day)
-        in_day_layout.addWidget(self.input_day)
+        in_day_layout.addWidget(self.input_day, QtCore.Qt.AlignLeft)
         button_layout = QHBoxLayout(self)#6
         # button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.calculate)
@@ -538,10 +551,15 @@ class MenuZvit(QWidget):
         # create input date labels
         self.label_date1 = QLabel(self)
         self.label_date1.setText('Введіть початкову дату операції:')
-        self.input_date1 = QLineEdit(today)
+        self.input_date1 = QDateEdit(self)
+        self.input_date1.setCalendarPopup(True)
+        self.input_date1.setDate(datetime.today())
+
         self.label_date2 = QLabel(self)
         self.label_date2.setText('Введіть кіневу дату операції:')
-        self.input_date2 = QLineEdit(today)
+        self.input_date2 = QDateEdit(self)
+        self.input_date2.setCalendarPopup(True)
+        self.input_date2.setDate(datetime.today())
         # create table widget
         column_count = len(self.names_columns)
         self.tableWidget = QTableWidget(0, column_count)
@@ -558,10 +576,10 @@ class MenuZvit(QWidget):
         main_box_layout = QVBoxLayout(self)
         in_data_1layout = QHBoxLayout(self)
         in_data_1layout.addWidget(self.label_date1)
-        in_data_1layout.addWidget(self.input_date1)
+        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
         in_data_2layout = QHBoxLayout(self)
         in_data_2layout.addWidget(self.label_date2)
-        in_data_2layout.addWidget(self.input_date2)
+        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_button)
         button_layout.addWidget(self.excel_button)
@@ -637,7 +655,9 @@ class Bread(QWidget):
         # create input fields
         self.label_date = QLabel(self)
         self.label_date.setText('Введіть дату операції:')
-        self.input_date = QLineEdit(today)
+        self.input_date = QDateEdit(self)
+        self.input_date.setCalendarPopup(True)
+        self.input_date.setDate(datetime.today())
         nulll = '0'
         self.label_bread = QLabel(self)
         self.label_bread.setText('Введіть кількість хліба:')
@@ -650,6 +670,7 @@ class Bread(QWidget):
         self.tableWidget_2 = QTableWidget(0, 6)  # +1
         self.tableWidget_2.setHorizontalHeaderLabels(self.name_lables_two)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(160)
+        self.tableWidget_2.setColumnWidth(0, 300)
         # create buttons
         self.form_table_button = QPushButton('   Сформувати таблицю')
         self.form_table_button.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -667,7 +688,7 @@ class Bread(QWidget):
         main_layout = QVBoxLayout(self)
         input_date_layout = QHBoxLayout(self)
         input_date_layout.addWidget(self.label_date)
-        input_date_layout.addWidget(self.input_date)
+        input_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
         input_bread_layout = QHBoxLayout(self)
         input_bread_layout.addWidget(self.label_bread)
         input_bread_layout.addWidget(self.input_bread)
@@ -722,47 +743,53 @@ class Bread(QWidget):
         self.tableWidget_2.setItem(4, 4, QTableWidgetItem(str(bread)))
 
     def calculate_result(self):
-        wheat = self.tableWidget_2.item(0, 2).text()
-        wheat = float(wheat)
-        if self.tableWidget_2.item(0, 3) is not None:
+        try:
+            wheat = self.tableWidget_2.item(0, 2).text()
+            wheat = float(wheat)
+        except:
+            wheat = 0
+        try:
             wheat_price = self.tableWidget_2.item(0, 3).text()
             wheat_price = float(wheat_price)
-        else:
+        except:
             wheat_price = 0
         wheat_sum = round(wheat * wheat_price, 3)
         yeast = self.tableWidget_2.item(1, 2).text()
         yeast = float(yeast)
-        if self.tableWidget_2.item(1, 3) is not None:
+        try:
             yeast_price = self.tableWidget_2.item(1, 3).text()
             yeast_price = float(yeast_price)
-        else:
+        except:
             yeast_price = 0
         yeast_sum = round(yeast * yeast_price, 3)
 
         oil = self.tableWidget_2.item(2, 2).text()
         oil = float(oil)
-        if self.tableWidget_2.item(2, 3) is not None:
+        try:
             oil_price = self.tableWidget_2.item(2, 3).text()
             oil_price = float(oil_price)
-        else:
+        except:
             oil_price = 0
         oil_sum = round(oil * oil_price, 3)
         salt = self.tableWidget_2.item(3, 2).text()
         salt = float(salt)
-        if self.tableWidget_2.item(3, 3) is not None:
+        try:
             salt_price = self.tableWidget_2.item(3, 3).text()
             salt_price = float(salt_price)
-        else:
+        except:
             salt_price = 0
         salt_sum = round(salt * salt_price, 3)
         sum_ingr = round(wheat + yeast + oil + salt, 3)
         self.tableWidget_2.setItem(5, 2, QTableWidgetItem(str(sum_ingr)))
-        sum_ingredients = wheat_sum + yeast_sum + oil_sum + salt_sum
+        sum_ingredients = round(wheat_sum + yeast_sum + oil_sum + salt_sum, 3)
         self.tableWidget_2.setItem(5, 3, QTableWidgetItem(str(sum_ingredients)))
         self.tableWidget_2.setItem(5, 5, QTableWidgetItem(str(sum_ingredients)))
-        bread = self.tableWidget_2.item(4, 4).text()
-        bread = float(bread)
-        bread_price = round(sum_ingredients / bread, 3)
+        try:
+            bread = self.tableWidget_2.item(4, 4).text()
+            bread = float(bread)
+            bread_price = round(sum_ingredients / bread, 3)
+        except:
+            bread_price = 0
         self.tableWidget_2.setItem(4, 5, QTableWidgetItem(str(bread_price)))
 
     def push_to_database(self):
@@ -781,7 +808,7 @@ class Bread(QWidget):
             data.append(item)
             val_chs = tuple(data)
         add_bread_baking(date_op, val_chs)
-        data_baker = parse_bread_baking_db(signal_b)
+        data_baker = parse_bread_baking_db(signal_b, 0, 0)
         data_baker = data_baker[0]
         bread = (data_baker[2],)
         zero = (
@@ -831,12 +858,22 @@ class BreadZvit(QWidget):
         self.parent = parent
         self.name_lables_one = columns_bread
         self.name_lables_two = columns_bread_act
-        signal = 1
-        self.rows = parse_bread_baking_db(signal)
         # create table
         self.tableWidget = QTableWidget(0, 17)  # +1
         self.tableWidget.setHorizontalHeaderLabels(self.name_lables_one)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(80)
+        # create input date labels
+        self.label_date1 = QLabel(self)
+        self.label_date1.setText('Введіть початкову дату операції:')
+        self.input_date1 = QDateEdit(self)
+        self.input_date1.setCalendarPopup(True)
+        self.input_date1.setDate(datetime.today())
+
+        self.label_date2 = QLabel(self)
+        self.label_date2.setText('Введіть кіневу дату операції:')
+        self.input_date2 = QDateEdit(self)
+        self.input_date2.setCalendarPopup(True)
+        self.input_date2.setDate(datetime.today())
         # create buttons
         self.form_table_button = QPushButton('   Сформувати таблицю')
         self.form_table_button.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -847,20 +884,27 @@ class BreadZvit(QWidget):
 
         main_layout = QVBoxLayout(self)
         button_layout = QHBoxLayout(self)
+        in_data_1layout = QHBoxLayout(self)
+        in_data_1layout.addWidget(self.label_date1)
+        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
+        in_data_2layout = QHBoxLayout(self)
+        in_data_2layout.addWidget(self.label_date2)
+        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
         button_layout.addWidget(self.form_table_button)
         button_layout.addWidget(self.excel_button)
+        main_layout.addLayout(in_data_1layout)
+        main_layout.addLayout(in_data_2layout)
         main_layout.addWidget(self.tableWidget)
         main_layout.addLayout(button_layout)
 
     def show_table_func(self):
-        pass
-        # table settings
-        row_count = len(self.rows)
-        self.tableWidget.setRowCount(row_count)
-        # # save tuples of values
-        # self.names = self.name_lables[0] #
-        self.values = self.rows[0]
-
+        signal_b = 1
+        day1 = self.input_date1.text()
+        day1 = (day1,)
+        day2 = self.input_date2.text()
+        day2 = (day2,)
+        self.rows = parse_bread_baking_db(signal_b, day1, day2)
+        self.tableWidget.setRowCount(len(self.rows)+1)
         row = -1
         for i in self.rows:
             temp = i
@@ -869,6 +913,26 @@ class BreadZvit(QWidget):
             for j in temp:
                 self.tableWidget.setItem(row, count, QTableWidgetItem(str(temp[count])))
                 count = count+1
+        sum_colls = []
+        total_colls = []
+        for coll in range(3, self.tableWidget.columnCount()):
+            data = []
+            for row in range(0, len(self.rows)):
+                if self.tableWidget.item(row, coll) is not None:
+                    item = self.tableWidget.item(row, coll).text()
+                    item = float(item)
+                else:
+                    item = 0
+                item = item
+                data.append(item)
+            sum_collumn = sum(data)
+            sum_colls.append(sum_collumn)
+        coll = 3
+        for i in sum_colls:
+            temp = i
+            temp = round(temp, 3)
+            self.tableWidget.setItem(len(self.rows), coll, QTableWidgetItem(str(temp)))
+            coll = coll + 1
 
     def export_to_excel(self):
         time_date = time.ctime()
@@ -926,12 +990,12 @@ class ProfitLossZvit(QWidget):
         main_box_layout = QVBoxLayout(self)
         in_data_1layout = QHBoxLayout(self)
         in_data_1layout.addWidget(self.label_date1)
-        in_data_1layout.addWidget(self.input_date1)
+        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
         in_data_1layout.addWidget(self.label_op)
         in_data_1layout.addWidget(self.input_op)
         in_data_2layout = QHBoxLayout(self)
         in_data_2layout.addWidget(self.label_date2)
-        in_data_2layout.addWidget(self.input_date2)
+        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_button)
         button_layout.addWidget(self.excel_button)
@@ -1125,7 +1189,8 @@ class Leftovers(QWidget):
         # create table widget
         self.tableWidget = QTableWidget(0, len(names_list)+2)  # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels[:2]+names_list) # + headers of columns on table
-        self.tableWidget.horizontalHeader().setDefaultSectionSize(150)
+        self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
+        self.tableWidget.setColumnWidth(0, 300)
         # create button
         self.pushButton = QPushButton('   Сформувати таблицю')
         self.pushButton.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -1212,6 +1277,7 @@ class MainWindow(QMainWindow):#, QDialog):
 ### Final App Block ###
 if __name__ == '__main__':
     app = QApplication(sys.argv)  # create app
+    # app.setStyle('Oxygen') # 'Breeze'
     dlgMain = MainWindow() # build object of class "DlgMain" and set here in variable "dlgMain"
     dlgMain.show() # show function
     sys.exit(app.exec_())  # loop app in "sys.exit" func for check logs
