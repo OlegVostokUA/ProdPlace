@@ -22,11 +22,8 @@ val_default = Database_handlers.sql_handlers.val_zag
 
 
 class Storage(QWidget):
-
-
     def __init__(self, parent=None):
         super(Storage, self).__init__()
-
         self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
@@ -96,7 +93,7 @@ class LossProfitTab(QWidget):
         names_list.insert(0, '---')
         self.input_detach_list.addItems(names_list)
         self.label_name = QLabel(self)
-        self.label_name.setText('Введіть прізвище, ім’я того, через кого здійснюєтся операція:')
+        self.label_name.setText('Введіть через кого здійснюєтся операція:')
         self.input_name = QLineEdit(unk)
         self.label_operation = QLabel(self)
         self.label_operation.setText("Оберіть тип операції")
@@ -124,25 +121,8 @@ class LossProfitTab(QWidget):
         self.form_excel = QPushButton('   Формувати у Excel')
         self.form_excel.setIcon(QtGui.QIcon('icons/excel.png'))
         self.form_excel.clicked.connect(self.export_to_excel)
-
         # layout box
         mainLayout = QVBoxLayout(self)
-
-        in_date_layout = QHBoxLayout(self)
-        in_date_layout.addWidget(self.label_date)
-        in_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
-        in_pidr_layout = QHBoxLayout(self)
-        in_pidr_layout.addWidget(self.label_pidr)
-        in_pidr_layout.addWidget(self.input_pidr)
-        in_pidr_name_layout = QHBoxLayout(self)
-        in_pidr_name_layout.addWidget(self.label_pidr_name)
-        in_pidr_name_layout.addWidget(self.input_pidr_name)
-        in_detach_list_layout = QHBoxLayout(self)
-        in_detach_list_layout.addWidget(self.label_detach_list)
-        in_detach_list_layout.addWidget(self.input_detach_list, QtCore.Qt.AlignLeft)
-        in_name_layout = QHBoxLayout(self)
-        in_name_layout.addWidget(self.label_name)
-        in_name_layout.addWidget(self.input_name)
 
         in_opper_type_layout = QHBoxLayout(self)
         in_opper_type_layout.addWidget(self.label_operation)
@@ -150,21 +130,23 @@ class LossProfitTab(QWidget):
         in_opper_type_layout.addWidget(self.check_op_loss_p)
         in_opper_type_layout.addWidget(self.check_op_loss)
         in_opper_type_layout.addWidget(self.check_op_prof_p)
+        #input_form_layout
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date, self.input_date)
+        input_form_layout.addRow(self.label_pidr, self.input_pidr)
+        input_form_layout.addRow(self.label_pidr_name, self.input_pidr_name)
+        input_form_layout.addRow(self.label_detach_list, self.input_detach_list)
+        input_form_layout.addRow(self.label_name, self.input_name)
 
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.save_to_db)
         button_layout.addWidget(self.form_excel)
 
-        mainLayout.addLayout(in_date_layout)
         mainLayout.addLayout(in_opper_type_layout)
-        mainLayout.addLayout(in_pidr_layout)
-        mainLayout.addLayout(in_pidr_name_layout)
-        mainLayout.addLayout(in_detach_list_layout)
-        mainLayout.addLayout(in_name_layout)
+        mainLayout.addLayout(input_form_layout)
         mainLayout.addWidget(self.tableWidget)
         mainLayout.addLayout(button_layout)
-
 
     def show_table_func(self):
         """
@@ -182,7 +164,6 @@ class LossProfitTab(QWidget):
             names_numb = names_numb + 1
         for row in range(row_count):  # for column 2
             self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
-
 
     def push_to_database(self):
         names_dict = parse_db_names_detach()
@@ -240,11 +221,9 @@ class LossProfitTab(QWidget):
 
 
 class Rozkladka(QWidget):
-
     def __init__(self, parent=None):
         super(Rozkladka, self).__init__()
         self.parent = parent
-
         self.rows = parse_db_rozklad()
         self.lables_main = columns_for_rozclad
         self.name_lables_one = parse_column_db()
@@ -302,7 +281,6 @@ class Rozkladka(QWidget):
 
 
 class Menu(QWidget):
-
     def __init__(self, parent=None):
         super(Menu, self).__init__()
         self.parent = parent
@@ -320,11 +298,9 @@ class Menu(QWidget):
         # create input fields
         self.label_date = QLabel(self)
         self.label_date.setText('Введіть дату операції:')
-
         self.input_date = QDateEdit(self)
         self.input_date.setCalendarPopup(True)
         self.input_date.setDate(datetime.today())
-
         self.label_ppl = QLabel(self)
         self.label_ppl.setText('Введіть кількість людей:')
         self.input_ppl = QLineEdit(zero_people)
@@ -361,27 +337,20 @@ class Menu(QWidget):
         self.to_excell.clicked.connect(self.export_to_excel)
 
         main_v_box = QVBoxLayout(self)
-        in_date_layout = QHBoxLayout(self) #1
-        in_date_layout.addWidget(self.label_date)
-        in_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
-        in_ppl_all_layout = QHBoxLayout(self)#2
-        in_ppl_all_layout.addWidget(self.label_ppl)
-        in_ppl_all_layout.addWidget(self.input_ppl)
-        in_ppl_d_layout = QHBoxLayout(self)#3
-        in_ppl_d_layout.addWidget(self.label_ppl_d)
-        in_ppl_d_layout.addWidget(self.input_ppl_d)
-        in_day_layout = QHBoxLayout(self)#4
-        in_day_layout.addWidget(self.label_day)
-        in_day_layout.addWidget(self.input_day, QtCore.Qt.AlignLeft)
-        button_layout = QHBoxLayout(self)#6
+
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date, self.input_date)
+        input_form_layout.addRow(self.label_ppl, self.input_ppl)
+        input_form_layout.addRow(self.label_ppl_d, self.input_ppl_d)
+        input_form_layout.addRow(self.label_day, self.input_day)
+
+        button_layout = QHBoxLayout(self)
         # button_layout.addWidget(self.form_table)
         button_layout.addWidget(self.calculate)
         button_layout.addWidget(self.save_to_db)
         button_layout.addWidget(self.to_excell)
-        main_v_box.addLayout(in_date_layout)
-        main_v_box.addLayout(in_ppl_all_layout)
-        main_v_box.addLayout(in_ppl_d_layout)
-        main_v_box.addLayout(in_day_layout)
+
+        main_v_box.addLayout(input_form_layout)
         main_v_box.addWidget(self.tableWidget)
         main_v_box.addWidget(self.tableWidget_2)
         main_v_box.addLayout(button_layout)
@@ -539,7 +508,6 @@ class Menu(QWidget):
 
 
 class MenuZvit(QWidget):
-
     def __init__(self, parent=None):
         super(MenuZvit, self).__init__()
         self.parent = parent
@@ -554,7 +522,6 @@ class MenuZvit(QWidget):
         self.input_date1 = QDateEdit(self)
         self.input_date1.setCalendarPopup(True)
         self.input_date1.setDate(datetime.today())
-
         self.label_date2 = QLabel(self)
         self.label_date2.setText('Введіть кіневу дату операції:')
         self.input_date2 = QDateEdit(self)
@@ -574,17 +541,16 @@ class MenuZvit(QWidget):
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_box_layout = QVBoxLayout(self)
-        in_data_1layout = QHBoxLayout(self)
-        in_data_1layout.addWidget(self.label_date1)
-        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
-        in_data_2layout = QHBoxLayout(self)
-        in_data_2layout.addWidget(self.label_date2)
-        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
+
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date1, self.input_date1)
+        input_form_layout.addRow(self.label_date2, self.input_date2)
+
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_button)
         button_layout.addWidget(self.excel_button)
-        main_box_layout.addLayout(in_data_1layout)
-        main_box_layout.addLayout(in_data_2layout)
+
+        main_box_layout.addLayout(input_form_layout)
         main_box_layout.addWidget(self.tableWidget)
         main_box_layout.addLayout(button_layout)
 
@@ -645,7 +611,6 @@ class MenuZvit(QWidget):
 
 
 class Bread(QWidget):
-
     def __init__(self, parent=None):
         super(Bread, self).__init__()
         self.parent = parent
@@ -666,7 +631,6 @@ class Bread(QWidget):
         self.tableWidget = QTableWidget(0, 17)  # +1
         self.tableWidget.setHorizontalHeaderLabels(self.name_lables_one)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(80)
-
         self.tableWidget_2 = QTableWidget(0, 6)  # +1
         self.tableWidget_2.setHorizontalHeaderLabels(self.name_lables_two)
         self.tableWidget_2.horizontalHeader().setDefaultSectionSize(160)
@@ -686,20 +650,18 @@ class Bread(QWidget):
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_layout = QVBoxLayout(self)
-        input_date_layout = QHBoxLayout(self)
-        input_date_layout.addWidget(self.label_date)
-        input_date_layout.addWidget(self.input_date, QtCore.Qt.AlignLeft)
-        input_bread_layout = QHBoxLayout(self)
-        input_bread_layout.addWidget(self.label_bread)
-        input_bread_layout.addWidget(self.input_bread)
+
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date, self.input_date)
+        input_form_layout.addRow(self.label_bread, self.input_bread)
+
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_table_button)
         button_layout.addWidget(self.calculate_button)
         button_layout.addWidget(self.save_to_db_button)
         button_layout.addWidget(self.excel_button)
 
-        main_layout.addLayout(input_date_layout)
-        main_layout.addLayout(input_bread_layout)
+        main_layout.addLayout(input_form_layout)
         main_layout.addWidget(self.tableWidget)
         main_layout.addWidget(self.tableWidget_2)
         main_layout.addLayout(button_layout)
@@ -852,7 +814,6 @@ class Bread(QWidget):
 
 
 class BreadZvit(QWidget):
-
     def __init__(self, parent=None):
         super(BreadZvit, self).__init__()
         self.parent = parent
@@ -868,7 +829,6 @@ class BreadZvit(QWidget):
         self.input_date1 = QDateEdit(self)
         self.input_date1.setCalendarPopup(True)
         self.input_date1.setDate(datetime.today())
-
         self.label_date2 = QLabel(self)
         self.label_date2.setText('Введіть кіневу дату операції:')
         self.input_date2 = QDateEdit(self)
@@ -883,17 +843,16 @@ class BreadZvit(QWidget):
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_layout = QVBoxLayout(self)
+
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date1, self.input_date1)
+        input_form_layout.addRow(self.label_date2, self.input_date2)
+
         button_layout = QHBoxLayout(self)
-        in_data_1layout = QHBoxLayout(self)
-        in_data_1layout.addWidget(self.label_date1)
-        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
-        in_data_2layout = QHBoxLayout(self)
-        in_data_2layout.addWidget(self.label_date2)
-        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
         button_layout.addWidget(self.form_table_button)
         button_layout.addWidget(self.excel_button)
-        main_layout.addLayout(in_data_1layout)
-        main_layout.addLayout(in_data_2layout)
+
+        main_layout.addLayout(input_form_layout)
         main_layout.addWidget(self.tableWidget)
         main_layout.addLayout(button_layout)
 
@@ -955,7 +914,6 @@ class BreadZvit(QWidget):
 
 
 class ProfitLossZvit(QWidget):
-
     def __init__(self, parent=None):
         super(ProfitLossZvit, self).__init__()
         self.parent = parent
@@ -978,7 +936,6 @@ class ProfitLossZvit(QWidget):
         self.tableWidget = QTableWidget(0, column_count)
         self.tableWidget.horizontalHeader().setDefaultSectionSize(120)
         self.tableWidget.setHorizontalHeaderLabels(self.names_columns)
-
         # create button box
         self.form_button = QPushButton('   Сформувати таблицю')
         self.form_button.setIcon(QtGui.QIcon('icons/computer.png'))
@@ -988,19 +945,17 @@ class ProfitLossZvit(QWidget):
         self.excel_button.clicked.connect(self.export_to_excel)
 
         main_box_layout = QVBoxLayout(self)
-        in_data_1layout = QHBoxLayout(self)
-        in_data_1layout.addWidget(self.label_date1)
-        in_data_1layout.addWidget(self.input_date1, QtCore.Qt.AlignLeft)
-        in_data_1layout.addWidget(self.label_op)
-        in_data_1layout.addWidget(self.input_op)
-        in_data_2layout = QHBoxLayout(self)
-        in_data_2layout.addWidget(self.label_date2)
-        in_data_2layout.addWidget(self.input_date2, QtCore.Qt.AlignLeft)
+
+        input_form_layout = QFormLayout(self)
+        input_form_layout.addRow(self.label_date1, self.input_date1)
+        input_form_layout.addRow(self.label_date2, self.input_date2)
+        input_form_layout.addRow(self.label_op, self.input_op)
+
         button_layout = QHBoxLayout(self)
         button_layout.addWidget(self.form_button)
         button_layout.addWidget(self.excel_button)
-        main_box_layout.addLayout(in_data_1layout)
-        main_box_layout.addLayout(in_data_2layout)
+
+        main_box_layout.addLayout(input_form_layout)
         main_box_layout.addWidget(self.tableWidget)
         main_box_layout.addLayout(button_layout)
 
@@ -1096,7 +1051,6 @@ class CreateDetachment(QWidget):
         self.save_btn.setIcon(QtGui.QIcon('icons/database.png'))
         self.save_btn.clicked.connect(self.take_data)
 
-
         main_box_layout = QVBoxLayout(self)
 
         in_data_1_layout = QHBoxLayout(self)
@@ -1169,9 +1123,7 @@ class CreateDetachment(QWidget):
         for x, y in zip(data_list[::2], data_list[1::2]):
             if x != '':
                 temp_tuple = (x, y)
-
                 temp_tuple = temp_tuple + date + val_default
-
                 detachments.append(temp_tuple)
         add_detachments(detachments)
 
@@ -1246,7 +1198,7 @@ class Leftovers(QWidget):
                 df.to_excel(file)
 
 
-class MainWindow(QMainWindow):#, QDialog):
+class MainWindow(QMainWindow):
     """
     MAIN window Class
     """
@@ -1271,7 +1223,6 @@ class MainWindow(QMainWindow):#, QDialog):
         self.main_widget.addTab(ProfitLossZvit(), "Прихід / Розхід (Звіт)")
         self.main_widget.addTab(Leftovers(), "Залишки ПОДК")
         self.main_widget.addTab(CreateDetachment(), "Додати підрозділи")
-
 
 
 ### Final App Block ###
