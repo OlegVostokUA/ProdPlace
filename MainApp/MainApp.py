@@ -294,7 +294,6 @@ class Menu(QWidget):
         self.parent = parent
         # constants class
         zero_people = '0'
-        default_day = 'Понеділок'
 
         self.rows = parse_db_rozklad()
         self.lables_main = columns_for_rozclad
@@ -315,7 +314,6 @@ class Menu(QWidget):
         self.label_ppl_d = QLabel(self)
         self.label_ppl_d.setText('Введіть кількість людей на обід:')
         self.input_ppl_d = QLineEdit(zero_people)
-        default_day = 'Понеділок'
         self.label_day = QLabel(self)
         self.label_day.setText('Введіть день тижня:')
         self.input_day = QComboBox(self)
@@ -370,7 +368,6 @@ class Menu(QWidget):
     def show_table_func(self, day):
         self.tableWidget.setRowCount(11)
         self.tableWidget_2.setRowCount(5)
-        day = day
         day = (day,)
         self.rows = parse_day_rozklad(day)
         self.rows_dinner = parse_day_dinner_rozklad(day)
@@ -455,9 +452,7 @@ class Menu(QWidget):
     def push_to_database(self):
         signal = 3
         date = (self.input_date.text(),)
-        item = self.input_ppl.text()
         ppl = (self.input_ppl.text(),)
-        item_d = self.input_ppl_d.text()
         ppl_d = (self.input_ppl_d.text(),)
         day_of_week = (self.input_day.currentText(),)
         row = 10
@@ -518,7 +513,7 @@ class Menu(QWidget):
                 df.at[row, columnHeaders[col]] = temp
         # activate dialog-window for save file
         result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
-                # try-except block for saving file
+        # try-except block for saving file
         try:
             df.to_excel(result[0])
         except:
@@ -577,10 +572,8 @@ class MenuZvit(QWidget):
         main_box_layout.addWidget(self.dialog)
 
     def show_table_func(self):
-        day1 = self.input_date1.text()
-        day1 = (day1,)
-        day2 = self.input_date2.text()
-        day2 = (day2,)
+        day1 = (self.input_date1.text(),)
+        day2 = (self.input_date2.text(),)
         self.rows = parse_menu_loss_db(day1, day2)
         self.tableWidget.setRowCount(len(self.rows)+1)
         row = -1
@@ -592,7 +585,7 @@ class MenuZvit(QWidget):
                 self.tableWidget.setItem(row, count, QTableWidgetItem(str(temp[count])))
                 count = count+1
         sum_colls = []
-        total_colls = []
+
         for coll in range(3, self.tableWidget.columnCount()):
             data = []
             for row in range(0, len(self.rows)):
@@ -613,11 +606,7 @@ class MenuZvit(QWidget):
             coll = coll + 1
 
     def export_to_excel(self):
-        day1 = self.input_date1.text()
-        day2 = self.input_date2.text()
-        name = 'Зведена відомість за період '
-        formatfile = '.xlsx'
-        file = name + day1 + ' - ' + day2 + formatfile
+
         columnHeaders = []
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
@@ -651,10 +640,9 @@ class Bread(QWidget):
         self.input_date = QDateEdit(self)
         self.input_date.setCalendarPopup(True)
         self.input_date.setDate(datetime.today())
-        nulll = '0'
         self.label_bread = QLabel(self)
         self.label_bread.setText('Введіть кількість хліба:')
-        self.input_bread = QLineEdit(nulll)
+        self.input_bread = QLineEdit('0')
         # create tables
         self.tableWidget = QTableWidget(0, 17)  # +1
         self.tableWidget.setHorizontalHeaderLabels(self.name_lables_one)
@@ -701,10 +689,9 @@ class Bread(QWidget):
     def show_table_func(self):
         self.tableWidget.setRowCount(1)
         self.tableWidget_2.setRowCount(6)
-        date = self.input_date.text()
+        date = (self.input_date.text(),)
         bread = self.input_bread.text()
         bread = float(bread)
-        date_t = (date,)
         out_p = 136.1
         oil_p = 0.141
         salt_p = 1.8
@@ -896,10 +883,8 @@ class BreadZvit(QWidget):
 
     def show_table_func(self):
         signal_b = 1
-        day1 = self.input_date1.text()
-        day1 = (day1,)
-        day2 = self.input_date2.text()
-        day2 = (day2,)
+        day1 = (self.input_date1.text(),)
+        day2 = (self.input_date2.text(),)
         self.rows = parse_bread_baking_db(signal_b, day1, day2)
         self.tableWidget.setRowCount(len(self.rows)+1)
         row = -1
@@ -911,7 +896,6 @@ class BreadZvit(QWidget):
                 self.tableWidget.setItem(row, count, QTableWidgetItem(str(temp[count])))
                 count = count+1
         sum_colls = []
-        total_colls = []
         for coll in range(3, self.tableWidget.columnCount()):
             data = []
             for row in range(0, len(self.rows)):
@@ -1015,10 +999,8 @@ class ProfitLossZvit(QWidget):
         elif text == 'Видатки':
             signal = 2
 
-        day1 = self.input_date1.text()
-        day1 = (day1,)
-        day2 = self.input_date2.text()
-        day2 = (day2,)
+        day1 = (self.input_date1.text(),)
+        day2 = (self.input_date2.text(),)
         self.rows = parse_loss_profit_db(signal, day1, day2)
         self.tableWidget.setRowCount(len(self.rows))
         row = -1
@@ -1185,7 +1167,7 @@ class Leftovers(QWidget):
         self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
-        self.rows = parse_db_detach()
+        #self.rows = parse_db_detach()
         names_dict = parse_db_names_detach()
         names_list = list(names_dict.keys())
         # create table widget
@@ -1213,6 +1195,7 @@ class Leftovers(QWidget):
         vBox.addWidget(self.dialog)
 
     def show_table_func(self):
+        self.rows = parse_db_detach()
         row_count = len(self.name_lables[0]) - 3
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
