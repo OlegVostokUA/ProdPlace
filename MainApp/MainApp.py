@@ -10,6 +10,7 @@ from Database_handlers.sql_handlers import *
 
 
 ### Constants ###
+date = datetime.now()
 today = datetime.today().strftime("%d.%m.%Y")
 day_of_week = datetime.today().isoweekday()
 header_labels = ['Найменування', 'од. виміру', 'кількість']
@@ -69,7 +70,7 @@ class LossProfitTab(QWidget):
     def __init__(self, parent=None):
         self.parent = parent
         super(LossProfitTab, self).__init__()
-        self.parent = parent
+        #self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
         # create input fields
@@ -121,6 +122,9 @@ class LossProfitTab(QWidget):
         self.form_excel = QPushButton('   Формувати у Excel')
         self.form_excel.setIcon(QtGui.QIcon('icons/excel.png'))
         self.form_excel.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
+
         # layout box
         mainLayout = QVBoxLayout(self)
 
@@ -147,6 +151,8 @@ class LossProfitTab(QWidget):
         mainLayout.addLayout(input_form_layout)
         mainLayout.addWidget(self.tableWidget)
         mainLayout.addLayout(button_layout)
+        # add dialog-window for save file
+        mainLayout.addWidget(self.dialog)
 
     def show_table_func(self):
         """
@@ -199,11 +205,7 @@ class LossProfitTab(QWidget):
         add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
 
     def export_to_excel(self):
-        time_date = time.ctime()
-        name = self.input_pidr.text()
-        time_file = time_date[4:10]
-        format_file = '.xlsx'
-        file = name + '.' + time_file + format_file
+
         columnHeaders = []
         row_count = len(self.name_lables[0]) - 2
         for j in range(self.tableWidget.model().columnCount()):
@@ -215,9 +217,15 @@ class LossProfitTab(QWidget):
                     temp = self.tableWidget.item(row, col).text()
                 except:
                     temp = 0
-
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class Rozkladka(QWidget):
@@ -335,6 +343,8 @@ class Menu(QWidget):
         self.to_excell = QPushButton('   Формувати у Excel')
         self.to_excell.setIcon(QtGui.QIcon('icons/excel.png'))
         self.to_excell.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
 
         main_v_box = QVBoxLayout(self)
 
@@ -354,6 +364,8 @@ class Menu(QWidget):
         main_v_box.addWidget(self.tableWidget)
         main_v_box.addWidget(self.tableWidget_2)
         main_v_box.addLayout(button_layout)
+        # add dialog-window for save file
+        main_v_box.addWidget(self.dialog)
 
     def show_table_func(self, day):
         self.tableWidget.setRowCount(11)
@@ -473,14 +485,7 @@ class Menu(QWidget):
         add_n_to_db(signal, day_of_week, ppl_d, date, val_ch_d)
 
     def export_to_excel(self):
-        timedate = time.ctime()
-        ppl = self.input_ppl.text()
-        ppl_d = self.input_ppl_d.text()
-        timefile = timedate[4:10]
-        dinner = ' Обід'
-        formatfile = '.xlsx'
-        file = ppl + ' чол.' + timefile + formatfile
-        file_d = ppl_d + ' чол.' + timefile + dinner + formatfile
+
         columnHeaders = []
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
@@ -492,7 +497,14 @@ class Menu(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+
+        # activate dialog-window for save file
+        result1 = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+                # try-except block for saving file
+        try:
+            df.to_excel(result1[0])
+        except:
+            pass
 
         for j in range(self.tableWidget_2.model().columnCount()):
             columnHeaders.append(self.tableWidget_2.horizontalHeaderItem(j).text())
@@ -504,7 +516,13 @@ class Menu(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file_d)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+                # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class MenuZvit(QWidget):
@@ -539,6 +557,8 @@ class MenuZvit(QWidget):
         self.excel_button = QPushButton('   Формувати у Excel')
         self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
 
         main_box_layout = QVBoxLayout(self)
 
@@ -553,6 +573,8 @@ class MenuZvit(QWidget):
         main_box_layout.addLayout(input_form_layout)
         main_box_layout.addWidget(self.tableWidget)
         main_box_layout.addLayout(button_layout)
+        # add dialog-window for save file
+        main_box_layout.addWidget(self.dialog)
 
     def show_table_func(self):
         day1 = self.input_date1.text()
@@ -607,7 +629,13 @@ class MenuZvit(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class Bread(QWidget):
@@ -648,6 +676,8 @@ class Bread(QWidget):
         self.excel_button = QPushButton('   Формувати у Excel')
         self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
 
         main_layout = QVBoxLayout(self)
 
@@ -665,6 +695,8 @@ class Bread(QWidget):
         main_layout.addWidget(self.tableWidget)
         main_layout.addWidget(self.tableWidget_2)
         main_layout.addLayout(button_layout)
+        # add dialog-window for save file
+        main_layout.addWidget(self.dialog)
 
     def show_table_func(self):
         self.tableWidget.setRowCount(1)
@@ -794,11 +826,7 @@ class Bread(QWidget):
         add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
 
     def export_to_excel(self):
-        time_date = time.ctime()
-        time_file = time_date[4:10]
-        bread = 'Хліб '
-        format_file = '.xlsx'
-        file = bread + time_file + format_file
+
         column_headers = []
         for j in range(self.tableWidget_2.model().columnCount()):
             column_headers.append(self.tableWidget_2.horizontalHeaderItem(j).text())
@@ -810,7 +838,13 @@ class Bread(QWidget):
                 except:
                     temp = 0
                 df.at[row, column_headers[col]] = temp
-                df.to_excel(file)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class BreadZvit(QWidget):
@@ -841,6 +875,8 @@ class BreadZvit(QWidget):
         self.excel_button = QPushButton('   Формувати у Excel')
         self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
 
         main_layout = QVBoxLayout(self)
 
@@ -855,6 +891,8 @@ class BreadZvit(QWidget):
         main_layout.addLayout(input_form_layout)
         main_layout.addWidget(self.tableWidget)
         main_layout.addLayout(button_layout)
+        # add dialog-window for save file
+        main_layout.addWidget(self.dialog)
 
     def show_table_func(self):
         signal_b = 1
@@ -894,11 +932,7 @@ class BreadZvit(QWidget):
             coll = coll + 1
 
     def export_to_excel(self):
-        time_date = time.ctime()
-        time_file = time_date[4:7]
-        bread = 'Звіт хлібопечення '
-        format_file = '.xlsx'
-        file = bread + time_file + format_file
+
         columnHeaders = []
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
@@ -910,7 +944,13 @@ class BreadZvit(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class ProfitLossZvit(QWidget):
@@ -923,10 +963,14 @@ class ProfitLossZvit(QWidget):
         # create input date labels
         self.label_date1 = QLabel(self)
         self.label_date1.setText('Введіть початкову дату операції:')
-        self.input_date1 = QLineEdit(today)
+        self.input_date1 = QDateEdit(self)
+        self.input_date1.setCalendarPopup(True)
+        self.input_date1.setDate(datetime.today())
         self.label_date2 = QLabel(self)
         self.label_date2.setText('Введіть кіневу дату операції:')
-        self.input_date2 = QLineEdit(today)
+        self.input_date2 = QDateEdit(self)
+        self.input_date2.setCalendarPopup(True)
+        self.input_date2.setDate(datetime.today())
         self.label_op = QLabel(self)
         self.label_op.setText('Введіть назву операції:')
         self.input_op = QComboBox(self)
@@ -943,6 +987,8 @@ class ProfitLossZvit(QWidget):
         self.excel_button = QPushButton('   Формувати у Excel')
         self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
 
         main_box_layout = QVBoxLayout(self)
 
@@ -958,6 +1004,8 @@ class ProfitLossZvit(QWidget):
         main_box_layout.addLayout(input_form_layout)
         main_box_layout.addWidget(self.tableWidget)
         main_box_layout.addLayout(button_layout)
+        # add dialog-window for save file
+        main_box_layout.addWidget(self.dialog)
 
     def show_table_func(self):
         signal = 0
@@ -983,11 +1031,7 @@ class ProfitLossZvit(QWidget):
                 count = count+1
 
     def export_to_excel(self):
-        day1 = self.input_date1.text()
-        day2 = self.input_date2.text()
-        name = self.input_op.currentText()
-        format_file = '.xlsx'
-        file = name + ' за період ' + day1 + '-' + day2 + format_file
+
         columnHeaders = []
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
@@ -999,7 +1043,13 @@ class ProfitLossZvit(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class CreateDetachment(QWidget):
@@ -1150,6 +1200,8 @@ class Leftovers(QWidget):
         self.excel_button = QPushButton('   Формувати у Excel')
         self.excel_button.setIcon(QtGui.QIcon('icons/excel.png'))
         self.excel_button.clicked.connect(self.export_to_excel)
+        # create dialog-window for save file
+        self.dialog = QFileDialog(self)
         # layout box
         vBox = QVBoxLayout(self)
         vBox.addWidget(self.tableWidget)
@@ -1157,6 +1209,8 @@ class Leftovers(QWidget):
         vBtn.addWidget(self.pushButton)
         vBtn.addWidget(self.excel_button)
         vBox.addLayout(vBtn)
+        # add dialog-window for save file
+        vBox.addWidget(self.dialog)
 
     def show_table_func(self):
         row_count = len(self.name_lables[0]) - 3
@@ -1181,9 +1235,7 @@ class Leftovers(QWidget):
                 row = row+1
 
     def export_to_excel(self):
-        data = today
-        format_file = '.xlsx'
-        file = 'Залишки станом на ' + data + format_file
+
         columnHeaders = []
         for j in range(self.tableWidget.model().columnCount()):
             columnHeaders.append(self.tableWidget.horizontalHeaderItem(j).text())
@@ -1195,7 +1247,13 @@ class Leftovers(QWidget):
                 except:
                     temp = 0
                 df.at[row, columnHeaders[col]] = temp
-                df.to_excel(file)
+        # activate dialog-window for save file
+        result = self.dialog.getSaveFileName(self.tableWidget, 'Зберегти файл', 'C:/', 'Excel files (*.xlsx)')
+        # try-except block for saving file
+        try:
+            df.to_excel(result[0])
+        except:
+            pass
 
 
 class MainWindow(QMainWindow):
