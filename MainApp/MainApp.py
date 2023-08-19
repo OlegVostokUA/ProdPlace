@@ -48,19 +48,19 @@ class Storage(QWidget):
         '''
         # table settings
         self.rows = parse_db()
-        row_count = len(self.name_lables[0]) - 3
+        row_count = len(self.name_lables[0]) - 4
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
         self.names = self.name_lables[0] #
         self.values = self.rows[0]
 
-        names_numb = 3
+        names_numb = 4
         for row in range(row_count): # for column 1
             self.tableWidget.setItem(row, 0, QTableWidgetItem(str(self.names[names_numb])))
             names_numb = names_numb+1
         for row in range(row_count): # for column 2
             self.tableWidget.setItem(row, 1, QTableWidgetItem(kg))
-        values_numb = 3
+        values_numb = 4
         for row in range(row_count):  # for column 3
             self.tableWidget.setItem(row, 2, QTableWidgetItem(str(self.values[values_numb])))
             values_numb = values_numb + 1
@@ -159,12 +159,12 @@ class LossProfitTab(QWidget):
         function for create and show data from 'main_file' table
         """
         # table settings
-        row_count = len(self.name_lables[0]) - 3
+        row_count = len(self.name_lables[0]) - 4
         self.tableWidget.setRowCount(row_count)
         # save tuples of values
         self.names = self.name_lables[0]  #
         # self.values = self.rows[0]
-        names_numb = 3
+        names_numb = 4
         for row in range(row_count):  # for column 1
             self.tableWidget.setItem(row, 0, QTableWidgetItem(str(self.names[names_numb])))
             names_numb = names_numb + 1
@@ -189,9 +189,10 @@ class LossProfitTab(QWidget):
         date_op = (self.input_date.text(),)
         number_ch = (self.input_pidr.text(),)
         index_ch = index_dtch
+        person = (self.input_name.text(),)
         column = 2
         data = []
-        row_count = len(self.name_lables[0]) - 3
+        row_count = len(self.name_lables[0]) - 4
 
         for row in range(row_count):
             if self.tableWidget.item(row, column) is not None:
@@ -202,7 +203,8 @@ class LossProfitTab(QWidget):
             data.append(item)
             val_ch = tuple(data)
 
-        add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
+        # add_n_to_db(signal, number_ch, index_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, index_ch, person, date_op, val_ch)
 
     def export_to_excel(self):
 
@@ -299,7 +301,7 @@ class Menu(QWidget):
         self.lables_main = columns_for_rozclad
         self.name_lables_one = parse_column_db()
         self.name_lables = self.name_lables_one[0]
-        self.name_lables = self.name_lables[2:]
+        self.name_lables = self.name_lables[3:]
         self.names_columns = self.lables_main + self.name_lables
         column_count = len(self.names_columns)
         # create input fields
@@ -409,12 +411,12 @@ class Menu(QWidget):
         for i in sum_colls:
             total = round(i * count_ppl, 3)
             total_colls.append(total)
-        coll = 3
+        coll = 2
         for i in sum_colls:
             temp = i
             coll = coll + 1
             self.tableWidget.setItem(9, coll, QTableWidgetItem(str(temp)))
-        coll = 3
+        coll = 2
         for i in total_colls:
             temp = i
             coll = coll + 1
@@ -438,12 +440,12 @@ class Menu(QWidget):
         for i in sum_colls_d:
             total = round(i * count_ppl_d, 3)
             total_colls_d.append(total)
-        coll = 3
+        coll = 2
         for i in sum_colls_d:
             temp = i
             coll = coll + 1
             self.tableWidget_2.setItem(3, coll, QTableWidgetItem(str(temp)))
-        coll = 3
+        coll = 2
         for i in total_colls_d:
             temp = i
             coll = coll + 1
@@ -451,6 +453,7 @@ class Menu(QWidget):
 
     def push_to_database(self):
         signal = 3
+        index_ch = ('zagin',)
         date = (self.input_date.text(),)
         ppl = (self.input_ppl.text(),)
         ppl_d = (self.input_ppl_d.text(),)
@@ -465,7 +468,8 @@ class Menu(QWidget):
                 item = 0
             data.append(item)
             val_ch = tuple(data)
-        add_n_to_db(signal, day_of_week, ppl, date, val_ch)
+        # add_n_to_db(signal, day_of_week, ppl, date, val_ch)
+        add_n_to_db(signal, day_of_week, index_ch, ppl, date, val_ch)
 
         row_d = 4
         data_d = []
@@ -477,7 +481,8 @@ class Menu(QWidget):
                 item = 0
             data_d.append(item)
             val_ch_d = tuple(data_d)
-        add_n_to_db(signal, day_of_week, ppl_d, date, val_ch_d)
+        # add_n_to_db(signal, day_of_week, ppl_d, date, val_ch_d)
+        add_n_to_db(signal, day_of_week, index_ch, ppl_d, date, val_ch)
 
     def export_to_excel(self):
 
@@ -526,9 +531,9 @@ class MenuZvit(QWidget):
         self.parent = parent
         self.names_columns = parse_column_db()[0]
         day_of_week = ('День тижня',)
-        ppl_col_name = ('Кількість людей',)
+        #ppl_col_name = ('Кількість людей',)
         self.names_columns = self.names_columns[2::]
-        self.names_columns = day_of_week+ppl_col_name+self.names_columns
+        #self.names_columns = day_of_week+self.names_columns
         # create input date labels
         self.label_date1 = QLabel(self)
         self.label_date1.setText('Введіть початкову дату операції:')
@@ -578,7 +583,7 @@ class MenuZvit(QWidget):
         self.tableWidget.setRowCount(len(self.rows)+1)
         row = -1
         for i in self.rows:
-            temp = i
+            temp = i[2::]
             row = row + 1
             count = 0
             for j in temp:
@@ -586,7 +591,7 @@ class MenuZvit(QWidget):
                 count = count+1
         sum_colls = []
 
-        for coll in range(3, self.tableWidget.columnCount()):
+        for coll in range(2, self.tableWidget.columnCount()):
             data = []
             for row in range(0, len(self.rows)):
                 if self.tableWidget.item(row, coll) is not None:
@@ -598,7 +603,7 @@ class MenuZvit(QWidget):
                 data.append(item)
             sum_collumn = sum(data)
             sum_colls.append(sum_collumn)
-        coll = 3
+        coll = 2
         for i in sum_colls:
             temp = i
             temp = round(temp, 3)
@@ -689,7 +694,7 @@ class Bread(QWidget):
     def show_table_func(self):
         self.tableWidget.setRowCount(1)
         self.tableWidget_2.setRowCount(6)
-        date = (self.input_date.text(),)
+        date = self.input_date.text()
         bread = self.input_bread.text()
         bread = float(bread)
         out_p = 136.1
@@ -775,9 +780,9 @@ class Bread(QWidget):
 
     def push_to_database(self):
         signal_b = 2
-        index = ('bread',)
-        date = self.tableWidget.item(0, 0).text()
-        date_op = (date,)
+        index = ('хліб',)
+        date = (self.input_date.text(),)
+
         row = 0
         data = []
         for coll in range(1, self.tableWidget.columnCount()):  # (3, self...)
@@ -788,7 +793,7 @@ class Bread(QWidget):
                 item = 0
             data.append(item)
             val_chs = tuple(data)
-        add_bread_baking(date_op, val_chs)
+        add_bread_baking(date, val_chs)
         data_baker = parse_bread_baking_db(signal_b, 0, 0)
         data_baker = data_baker[0]
         bread = (data_baker[2],)
@@ -798,7 +803,8 @@ class Bread(QWidget):
         val_ch = bread + zero
         number_ch = index
         signal = 1
-        add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
+        #add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, number_ch, index, date, val_ch)
         signal = 2
         wheat = (data_baker[1],)
         oil = (data_baker[8],)
@@ -810,7 +816,8 @@ class Bread(QWidget):
         zero4 = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
         zero5 = (0, 0, 0, 0, 0, 0, 0, 0)
         val_ch = zero1 + oil + zero2 + wheat + zero3 + salt + zero4 + yeast + zero5
-        add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
+        # add_n_to_db(signal, number_ch, number_ch, date_op, val_ch)
+        add_n_to_db(signal, number_ch, number_ch, index, date, val_ch)
 
     def export_to_excel(self):
 
@@ -1151,11 +1158,12 @@ class CreateDetachment(QWidget):
         date = (today,)
 
         detachments = []
-
+        person = ('default',)
         for x, y in zip(data_list[::2], data_list[1::2]):
             if x != '':
                 temp_tuple = (x, y)
                 temp_tuple = temp_tuple + date + val_default
+                #temp_tuple = temp_tuple + person + date + val_default
                 detachments.append(temp_tuple)
         add_detachments(detachments)
 

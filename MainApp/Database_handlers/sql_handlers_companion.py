@@ -93,8 +93,6 @@ def start_new_db(detachment):
 
 
 
-def come_on():
-    print('sss')
 ################################
 
 
