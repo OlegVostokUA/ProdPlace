@@ -92,6 +92,9 @@ def start_new_db(detachment):
     conn.commit()
 
 
+
+def come_on():
+    print('sss')
 ################################
 
 
