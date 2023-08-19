@@ -91,7 +91,7 @@ def start_new_db(detachment):
 
     conn.commit()
 
-
+### gf
 ################################
 
 
