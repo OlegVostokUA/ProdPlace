@@ -1012,7 +1012,7 @@ class ProfitLossZvit(QWidget):
         self.tableWidget.setRowCount(len(self.rows))
         row = -1
         for i in self.rows:
-            temp = i
+            temp = i[1::]
             row = row + 1
             count = 0
             for j in temp:
@@ -1162,8 +1162,8 @@ class CreateDetachment(QWidget):
         for x, y in zip(data_list[::2], data_list[1::2]):
             if x != '':
                 temp_tuple = (x, y)
-                temp_tuple = temp_tuple + date + val_default
-                #temp_tuple = temp_tuple + person + date + val_default
+                #temp_tuple = temp_tuple + date + val_default
+                temp_tuple = temp_tuple + person + date + val_default
                 detachments.append(temp_tuple)
         add_detachments(detachments)
 
