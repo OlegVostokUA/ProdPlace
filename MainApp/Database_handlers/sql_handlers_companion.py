@@ -1,4 +1,7 @@
 import sqlite3
+from datetime import datetime
+
+date = datetime.today().strftime("%d.%m.%Y")
 
 # functions of parsing databases
 def parse_column_db():
@@ -69,6 +72,7 @@ def parse_db_detach_actual(detachment):
 
 def start_new_db(detachment):
     # функция для извлечения данных из бд отделов
+    dd = (date,) + detachment
     conn = sqlite3.connect('Database/prod_database.db') # Database/prod_database.db
     cursor = conn.cursor()
 
@@ -81,6 +85,9 @@ def start_new_db(detachment):
     cursor.execute(delete_row, (detachment))
 
     cursor.executemany('''INSERT INTO detach_start_zvit VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', records)
+
+    update_row = ("""UPDATE detach_start_zvit SET дата = ? WHERE index_db = ?""")
+    cursor.execute(update_row, (dd))
 
     conn.commit()
 
