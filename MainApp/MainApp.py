@@ -238,7 +238,7 @@ class Rozkladka(QWidget):
         self.lables_main = columns_for_rozclad
         self.name_lables_one = parse_column_db()
         self.name_lables = self.name_lables_one[0]
-        self.name_lables = self.name_lables[2:]
+        self.name_lables = self.name_lables[4:]
         self.names_columns = self.lables_main + self.name_lables
         column_count = len(self.names_columns)
         self.tableWidget = QTableWidget(0, column_count)
@@ -301,7 +301,7 @@ class Menu(QWidget):
         self.lables_main = columns_for_rozclad
         self.name_lables_one = parse_column_db()
         self.name_lables = self.name_lables_one[0]
-        self.name_lables = self.name_lables[3:]
+        self.name_lables = self.name_lables[4:]
         self.names_columns = self.lables_main + self.name_lables
         column_count = len(self.names_columns)
         # create input fields
@@ -695,8 +695,7 @@ class Bread(QWidget):
         self.tableWidget.setRowCount(1)
         self.tableWidget_2.setRowCount(6)
         date = self.input_date.text()
-        bread = self.input_bread.text()
-        bread = float(bread)
+        bread = float(self.input_bread.text())
         out_p = 136.1
         oil_p = 0.141
         salt_p = 1.8
@@ -731,7 +730,7 @@ class Bread(QWidget):
     def calculate_result(self):
         try:
             wheat = self.tableWidget_2.item(0, 2).text()
-            wheat = float(wheat)
+            wheat = round(float(wheat), 3)
         except:
             wheat = 0
         try:
@@ -741,7 +740,7 @@ class Bread(QWidget):
             wheat_price = 0
         wheat_sum = round(wheat * wheat_price, 3)
         yeast = self.tableWidget_2.item(1, 2).text()
-        yeast = float(yeast)
+        yeast = round(float(yeast), 3)
         try:
             yeast_price = self.tableWidget_2.item(1, 3).text()
             yeast_price = float(yeast_price)
@@ -750,7 +749,7 @@ class Bread(QWidget):
         yeast_sum = round(yeast * yeast_price, 3)
 
         oil = self.tableWidget_2.item(2, 2).text()
-        oil = float(oil)
+        oil = round(float(oil), 3)
         try:
             oil_price = self.tableWidget_2.item(2, 3).text()
             oil_price = float(oil_price)
@@ -758,7 +757,7 @@ class Bread(QWidget):
             oil_price = 0
         oil_sum = round(oil * oil_price, 3)
         salt = self.tableWidget_2.item(3, 2).text()
-        salt = float(salt)
+        salt = round(float(salt), 3)
         try:
             salt_price = self.tableWidget_2.item(3, 3).text()
             salt_price = float(salt_price)
@@ -772,7 +771,7 @@ class Bread(QWidget):
         self.tableWidget_2.setItem(5, 5, QTableWidgetItem(str(sum_ingredients)))
         try:
             bread = self.tableWidget_2.item(4, 4).text()
-            bread = float(bread)
+            bread = round(float(bread), 3)
             bread_price = round(sum_ingredients / bread, 3)
         except:
             bread_price = 0
