@@ -812,7 +812,7 @@ class BreadZvit(QWidget):
 
 class MainStorage(QWidget):
     def __init__(self, parent=None):
-        super(Storage, self).__init__()
+        super(MainStorage, self).__init__()
         self.parent = parent
         # parse database
         self.name_lables = parse_column_db()
