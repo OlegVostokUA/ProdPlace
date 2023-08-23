@@ -111,9 +111,7 @@ def add_n_to_db_main(number_zag, index_zag, person, date, val_zag):
         val)
     conn.commit()
 
-# conn_db()
-# add_names_to_db_names(names_production)
-# add_n_to_db_main(number_zag, index_zag, person, date, val_zag)
+
 
 # functions of parsing databases
 def parse_column_db():
@@ -207,14 +205,15 @@ def parse_loss_profit_db(signal, day1, day2):
     signal = signal
     day1 = day1
     day2 = day2
-    dd = day1+day2
+    index = ('хліб', )
+    dd = index+day1+day2
     conn = sqlite3.connect("Database/prod_database.db")
     cursor = conn.cursor()
     if signal == 1:
-        data = ('''SELECT * FROM profit WHERE дата BETWEEN ? AND ?''')
+        data = ('''SELECT * FROM profit WHERE index_db <> ? AND дата BETWEEN ? AND ?''')
         cursor.execute(data, (dd))
     elif signal == 2:
-        data = ('''SELECT * FROM loss WHERE дата BETWEEN ? AND ?''')
+        data = ('''SELECT * FROM loss WHERE index_db <> ? AND дата BETWEEN ? AND ?''')
         cursor.execute(data, (dd))
     records = cursor.fetchall()
     return records
@@ -502,3 +501,10 @@ def clear_rozclad_db():
     cursor.execute("DELETE FROM rozklad_db ;")
     conn.commit()
 
+
+def start_database():
+    conn_db()
+    add_names_to_db_names(names_production)
+    add_n_to_db_main(number_zag, index_zag, person, date, val_zag)
+
+# start_database()

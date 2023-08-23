@@ -147,7 +147,7 @@ class Rozkladka(QWidget):
     def __init__(self, parent=None):
         super(Rozkladka, self).__init__()
         self.parent = parent
-        self.rows = parse_db_rozklad()
+
         self.lables_main = columns_for_rozclad
         self.name_lables_one = parse_column_db()
         self.name_lables = self.name_lables_one[0]
@@ -170,6 +170,7 @@ class Rozkladka(QWidget):
         main_v_box.addLayout(button_v_box)
 
     def show_table_func(self):
+        self.rows = parse_db_rozklad()
         self.tableWidget.setRowCount(65)
         row = -1
         for i in self.rows:

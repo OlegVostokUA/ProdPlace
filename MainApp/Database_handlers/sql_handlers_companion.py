@@ -50,7 +50,7 @@ def parse_db_detach_profit(data_d): # fix it with dates
     cursor = conn.cursor()
 
 
-    data = ('''SELECT * FROM detach_loss WHERE index_db = ? AND person <> ? AND дата BETWEEN ? AND ?''')
+    data = ('''SELECT * FROM detach_profit WHERE index_db = ? AND person <> ? AND дата BETWEEN ? AND ?''')
     cursor.execute(data, (data_d))
     records = cursor.fetchall()
 

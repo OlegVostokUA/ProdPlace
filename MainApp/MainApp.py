@@ -27,7 +27,7 @@ class Storage(QWidget):
         super(Storage, self).__init__()
         self.parent = parent
         # parse database
-        self.name_lables = parse_column_db()
+
         # create table widget
         self.tableWidget = QTableWidget(0, 3) # rows, columns
         self.tableWidget.setHorizontalHeaderLabels(header_labels) # headers of columns on table
@@ -47,6 +47,7 @@ class Storage(QWidget):
         function for create and show data from 'main_file' table
         '''
         # table settings
+        self.name_lables = parse_column_db()
         self.rows = parse_db()
         row_count = len(self.name_lables[0]) - 4
         self.tableWidget.setRowCount(row_count)
@@ -460,7 +461,7 @@ class Menu(QWidget):
         day_of_week = (self.input_day.currentText(),)
         row = 10
         data = []
-        for coll in range(4, self.tableWidget.columnCount()):  # (3, self...)
+        for coll in range(3, self.tableWidget.columnCount()):  # (3, self...)
             if self.tableWidget.item(row, coll) is not None:
                 item = self.tableWidget.item(row, coll).text()
                 item = float(item)
@@ -473,7 +474,7 @@ class Menu(QWidget):
 
         row_d = 4
         data_d = []
-        for coll in range(4, self.tableWidget_2.columnCount()):  # (3, self...)
+        for coll in range(3, self.tableWidget_2.columnCount()):  # (3, self...)
             if self.tableWidget_2.item(row_d, coll) is not None:
                 item = self.tableWidget_2.item(row_d, coll).text()
                 item = float(item)
