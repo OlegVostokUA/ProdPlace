@@ -36,7 +36,7 @@ def parse_db_detach_loss(data_d): # fix it with dates
     conn = sqlite3.connect('Database/prod_database.db') # Database/prod_database.db
     cursor = conn.cursor()
 
-    data = ('''SELECT * FROM detach_loss WHERE index_db = ? AND дата BETWEEN ? AND ?''')
+    data = ('''SELECT * FROM detach_loss WHERE index_db = ? AND person <> ? AND дата BETWEEN ? AND ?''')
 
     cursor.execute(data, (data_d))
     records = cursor.fetchall()
@@ -50,7 +50,7 @@ def parse_db_detach_profit(data_d): # fix it with dates
     cursor = conn.cursor()
 
 
-    data = ('''SELECT * FROM detach_profit WHERE index_db = ? AND дата BETWEEN ? AND ?''')
+    data = ('''SELECT * FROM detach_loss WHERE index_db = ? AND person <> ? AND дата BETWEEN ? AND ?''')
     cursor.execute(data, (data_d))
     records = cursor.fetchall()
 
@@ -104,16 +104,6 @@ def parse_db_rozklad():
     return records
 
 
-def clear_rozclad_db():
-    '''
-    func for clear old values of rozclad_db
-    '''
-    conn = sqlite3.connect("Database/prod_database.db")
-    cursor = conn.cursor()
-    cursor.execute("DELETE FROM rozklad_db ;")
-    conn.commit()
-
-
 def parse_day_rozklad(day):
     day = day
     conn = sqlite3.connect("Database/prod_database.db")
@@ -122,6 +112,7 @@ def parse_day_rozklad(day):
     cursor.execute(data, (day))
     records = cursor.fetchall()
     return records
+
 
 def parse_day_dinner_rozklad(day):
     day = day
@@ -133,7 +124,6 @@ def parse_day_dinner_rozklad(day):
     cursor.execute(data, (dd))
     records = cursor.fetchall()
     return records
-
 
 
 def add_n_to_db(signal, number_ch, index_ch, person, date_op, val_ch):
@@ -168,10 +158,6 @@ def add_n_to_db(signal, number_ch, index_ch, person, date_op, val_ch):
     val_scnd = []
     val_scnd.append(almount_scnd)
 
-    cursor.executemany(
-        "INSERT INTO detach_menu_loss VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                val)
-
     old_data_dtch = ('''SELECT * FROM detach WHERE index_db = ?''')
     cursor.execute(old_data_dtch, (index_ch))
     records_dtch = cursor.fetchall()
@@ -180,9 +166,32 @@ def add_n_to_db(signal, number_ch, index_ch, person, date_op, val_ch):
         "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 records_dtch)
 
-    cursor.executemany(
-        "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                val_scnd)
+    if signal == 3:
+        cursor.executemany(
+            "INSERT INTO detach_menu_loss VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            val)
+
+        cursor.executemany(
+            "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    val_scnd)
+
+    if signal == 2:
+        cursor.executemany(
+            "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    val_scnd)
+
+        cursor.executemany(
+            "INSERT INTO detach_loss VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    val_scnd)
+
+    elif signal == 1:
+        cursor.executemany(
+            "INSERT INTO detach_temp VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    val)
+
+        cursor.executemany(
+            "INSERT INTO detach_profit VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                    val)
 
     number = ('''SELECT name_db FROM detach_temp''')
     cursor.execute(number)
@@ -231,10 +240,55 @@ def add_n_to_db(signal, number_ch, index_ch, person, date_op, val_ch):
             val_sum_dtch)
 
     cursor.execute('DELETE FROM detach_temp ;')
+
     conn.commit()
 
 
-################################
+def parse_menu_loss_db(index_ch, day1, day2):
+    index_ch = index_ch
+    day1 = day1
+    day2 = day2
+    dd = index_ch+day1+day2
+    conn = sqlite3.connect("Database/prod_database.db")
+    cursor = conn.cursor()
+    data = ('''SELECT * FROM detach_menu_loss WHERE index_db = ? AND дата BETWEEN ? AND ?''')
+    cursor.execute(data, (dd))
+    records = cursor.fetchall()
+    return records
+
+
+def parse_bread_baking_db(signal_b, index, day1, day2):
+    signal_b = signal_b
+    index = index
+    day1 = day1
+    day2 = day2
+    dd = index+day1+day2
+    conn = sqlite3.connect("Database/prod_database.db")
+    cursor = conn.cursor()
+    if signal_b == 1:
+        data = ('''SELECT * FROM detach_bread_baking WHERE index_db = ? AND дата BETWEEN ? AND ?''') #  index_db = ? AND
+        cursor.execute(data, (dd))
+
+    elif signal_b == 2:
+        data = ('''SELECT * FROM detach_bread_baking WHERE index_db = ? AND rowid>0 ORDER BY rowid DESC LIMIT 1''') #  index_db = ? AND
+        cursor.execute(data, (index))
+    records = cursor.fetchall()
+    cursor.close()
+    return records
+
+
+def add_bread_baking(index, date_op, val_chs):
+    index = index
+    date_op = date_op
+    val_chs = val_chs
+    almount1 = index+date_op+val_chs
+    val = []
+    val.append(almount1)
+    conn = sqlite3.connect("Database/prod_database.db")
+    cursor = conn.cursor()
+    cursor.executemany("INSERT INTO detach_bread_baking VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", val)
+
+    conn.commit()
 
 
 def parse_db():
@@ -249,37 +303,12 @@ def parse_db():
     cursor.close()
     return records
 
+################################
 
 
 
-def parse_menu_loss_db(day1, day2):
-    day1 = day1
-    day2 = day2
-    dd = day1+day2
-    conn = sqlite3.connect("Database/prod_database.db")
-    cursor = conn.cursor()
-    data = ('''SELECT * FROM menu_loss WHERE дата BETWEEN ? AND ?''')
-    cursor.execute(data, (dd))
-    records = cursor.fetchall()
-    return records
 
-def parse_bread_baking_db(signal_b, day1, day2):
-    signal_b = signal_b
-    day1 = day1
-    day2 = day2
-    dd = day1+day2
-    conn = sqlite3.connect("Database/prod_database.db")
-    cursor = conn.cursor()
-    if signal_b == 1:
-        data = ('''SELECT * FROM bread_baking WHERE дата BETWEEN ? AND ?''')
-        cursor.execute(data, (dd))
 
-    elif signal_b == 2:
-        data = ('''SELECT * FROM bread_baking WHERE rowid>0 ORDER BY rowid DESC LIMIT 1''')
-        cursor.execute(data)
-    records = cursor.fetchall()
-    cursor.close()
-    return records
 
 def parse_loss_profit_db(signal, day1, day2):
     signal = signal
@@ -356,17 +385,7 @@ def add_values_to_rozclad_db(val_roz):
     conn.commit()
 
 
-def add_bread_baking(date_op, val_chs):
-    date_op = date_op
-    val_chs = val_chs
-    almount1 = date_op+val_chs
-    val = []
-    val.append(almount1)
-    conn = sqlite3.connect("Database/prod_database.db")
-    cursor = conn.cursor()
-    cursor.executemany("INSERT INTO bread_baking VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)", val)
 
-    conn.commit()
 
 # functions for delete from databases
 

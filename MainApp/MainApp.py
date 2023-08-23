@@ -806,7 +806,7 @@ class Bread(QWidget):
         add_n_to_db(signal, number_ch, number_ch, index, date, val_ch)
         signal = 2
         wheat = (data_baker[1],)
-        oil = (data_baker[8],)
+        oil = (data_baker[7],)
         salt = (data_baker[11],)
         yeast = (data_baker[15],)
         zero1 = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
