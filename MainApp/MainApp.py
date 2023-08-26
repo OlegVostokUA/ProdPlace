@@ -424,6 +424,10 @@ class Menu(QWidget):
             temp = i
             coll = coll + 1
             self.tableWidget.setItem(10, coll, QTableWidgetItem(str(temp)))
+
+        self.tableWidget.setItem(9, 67, QTableWidgetItem(str(1)))
+        self.tableWidget.setItem(10, 67, QTableWidgetItem(str(count_ppl)))
+
         count_ppl_d = self.input_ppl_d.text()
         count_ppl_d = int(count_ppl_d)
         sum_colls_d = []
@@ -454,6 +458,9 @@ class Menu(QWidget):
             temp = i
             coll = coll + 1
             self.tableWidget_2.setItem(5, coll, QTableWidgetItem(str(temp)))
+
+        self.tableWidget_2.setItem(4, 67, QTableWidgetItem(str(1)))
+        self.tableWidget_2.setItem(5, 67, QTableWidgetItem(str(count_ppl_d)))
 
     def push_to_database(self):
         signal = 3
