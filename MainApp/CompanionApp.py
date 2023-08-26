@@ -8,6 +8,10 @@ from PyQt5 import QtCore, QtGui
 import Database_handlers
 from Database_handlers.sql_handlers_companion import *
 
+# pip install pyinstaller
+# pyinstaller -F -w -i "C:\Users\User\PycharmProjects\ProdPlace\MainApp\detach.ico" CompanionApp.py
+
+
 ### Constants ###
 date = datetime.now()
 today = datetime.today().strftime("%d.%m.%Y")
@@ -254,7 +258,7 @@ class Menu(QWidget):
 
     def show_table_func(self, day):
         self.tableWidget.setRowCount(11)
-        self.tableWidget_2.setRowCount(5)
+        self.tableWidget_2.setRowCount(6)
         day = (day,)
         self.rows = parse_day_rozklad(day)
         self.rows_dinner = parse_day_dinner_rozklad(day)
@@ -328,12 +332,12 @@ class Menu(QWidget):
         for i in sum_colls_d:
             temp = i
             coll = coll + 1
-            self.tableWidget_2.setItem(3, coll, QTableWidgetItem(str(temp)))
+            self.tableWidget_2.setItem(4, coll, QTableWidgetItem(str(temp)))
         coll = 2
         for i in total_colls_d:
             temp = i
             coll = coll + 1
-            self.tableWidget_2.setItem(4, coll, QTableWidgetItem(str(temp)))
+            self.tableWidget_2.setItem(5, coll, QTableWidgetItem(str(temp)))
 
     def push_to_database(self):
         signal = 3
@@ -870,7 +874,7 @@ class MainWindow(QMainWindow):
         # add widgets
         self.main_widget = QTabWidget()
         self.detachment = QInputDialog.getText(self.main_widget, 'Введіть підрозділ', 'Введіть індекс підрозділу',
-                                  text='test')
+                                  text='enter index . . . ')
         global detachment
         detachment = self.detachment
         self.setCentralWidget(self.main_widget)
