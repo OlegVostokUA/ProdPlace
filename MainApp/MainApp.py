@@ -409,7 +409,7 @@ class Menu(QWidget):
                     item = 0
                 item = round(item / 1000, 3)
                 data.append(item)
-            sum_collumn = sum(data)
+            sum_collumn = round(sum(data), 3)
             sum_colls.append(sum_collumn)
         for i in sum_colls:
             total = round(i * count_ppl, 3)
@@ -438,7 +438,8 @@ class Menu(QWidget):
                     item = 0
                 item = round(item / 1000, 3)
                 data_d.append(item)
-            sum_collumn_d = sum(data_d)
+
+            sum_collumn_d = round(sum(data_d), 3)
             sum_colls_d.append(sum_collumn_d)
         for i in sum_colls_d:
             total = round(i * count_ppl_d, 3)
