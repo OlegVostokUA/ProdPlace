@@ -315,7 +315,7 @@ class Menu(QWidget):
         total_colls_d = []
         for coll in range(3, self.tableWidget_2.columnCount()):
             data_d = []
-            for row in range(0, 3):
+            for row in range(0, 4):
                 if self.tableWidget_2.item(row, coll) is not None:
                     item = self.tableWidget_2.item(row, coll).text()
                     item = float(item)

@@ -266,7 +266,7 @@ class Rozkladka(QWidget):
 
 
     def show_table_func(self):
-        self.tableWidget.setRowCount(65)
+        self.tableWidget.setRowCount(63)
         row = -1
         for i in self.rows:
             temp = i
@@ -430,7 +430,7 @@ class Menu(QWidget):
         total_colls_d = []
         for coll in range(3, self.tableWidget_2.columnCount()):
             data_d = []
-            for row in range(0, 3):
+            for row in range(0, 4):
                 if self.tableWidget_2.item(row, coll) is not None:
                     item = self.tableWidget_2.item(row, coll).text()
                     item = float(item)
